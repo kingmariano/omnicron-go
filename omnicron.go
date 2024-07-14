@@ -187,6 +187,10 @@ func (c *Client) newFormWithFilePostRequest(ctx context.Context, path, query str
 	return resBody, nil
 }
 
+// Ptr returns a pointer to the given value.
+func Ptr[T any](v T) *T {
+	return &v
+}
 
 func (c *Client) withQueryParameters(fullURLPath, query string) string {
 	params := url.Values{}

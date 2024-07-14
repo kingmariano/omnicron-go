@@ -55,7 +55,7 @@ type ToolFunction struct {
 }
 
 // CompletionCreateParams represents the inputs for the groq completion params.
-type CompletionCreateParams struct {
+type GroqChatCompletionParams struct {
 	Messages         []Message      `json:"messages"`
 	Model            string         `json:"model"`
 	FrequencyPenalty float32        `json:"frequency_penalty,omitempty"`
@@ -79,7 +79,7 @@ type GroqChatResponse struct {
 	Content string `json:"content"`
 }
 
-func (c *Client) GroqChatCompletion(ctx context.Context, req *CompletionCreateParams) (*GroqChatResponse, error) {
+func (c *Client) GroqChatCompletion(ctx context.Context, req *GroqChatCompletionParams) (*GroqChatResponse, error) {
 	if len(req.Messages) == 0 {
 		return nil, GroqChatCompletionNoMessageError
 	}
