@@ -7,18 +7,18 @@ import (
 	"github.com/kingmariano/omnicron-go"
 )
 
-func main(){
-    apiKey := "YOUR_API_KEY"
-    client := omnicron.NewClient(apiKey, omnicron.WithBaseURL("https://omnicron-latest.onrender.com/"))
+func main() {
+	apiKey := "YOUR_API_KEY"
+	client := omnicron.NewClient(apiKey, omnicron.WithBaseURL("https://omnicron-latest.onrender.com/"))
 	res, err := client.GroqChatCompletion(context.Background(), &omnicron.GroqChatCompletionParams{
 		Messages: []omnicron.Message{
-			{  
-				Role: "user",
+			{
+				Role:    "user",
 				Content: "Hello, what is AI?",
 			},
 		},
 	})
-	if err != nil{
+	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
