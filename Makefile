@@ -2,11 +2,11 @@
 
 # Variables
 GOCMD = go
+GOFMT =  gofmt
 GOTEST = $(GOCMD) test
-GOFMT = $(GOCMD) fmt
 
 test:
 	$(GOTEST) -v ./...
 
 fmt:
-	$(GOFMT) ./...
+	$(GOFMT) -s -w .
