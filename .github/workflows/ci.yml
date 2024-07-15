@@ -27,9 +27,9 @@ jobs:
 
       # - name: Run Linter
       #   uses: golangci/golangci-lint-action@v3
-      
+
       - name: Format code
-        run: make format
+        run: make fmt
 
       - name: Run Tests
         run: make test
