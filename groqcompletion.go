@@ -81,10 +81,10 @@ type GroqChatResponse struct {
 
 func (c *Client) GroqChatCompletion(ctx context.Context, req *GroqChatCompletionParams) (*GroqChatResponse, error) {
 	if len(req.Messages) == 0 {
-		return nil, GroqChatCompletionNoMessageError
+		return nil, ErrGroqChatCompletionNoMessage
 	}
 	if req.Model == "" {
-		return nil, ModelNotFoundError
+		return nil, ErrModelNotFound
 	}
 	body, err := c.newJSONPostRequest(ctx, "/grok/chatcompletion", "", req)
 	if err != nil {
