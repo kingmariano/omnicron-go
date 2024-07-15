@@ -62,7 +62,7 @@ func (c *Client) newJSONPostRequest(ctx context.Context, path, query string, pay
 	if query != "" {
 		fullURLPath = c.withQueryParameters(fullURLPath, query)
 	}
-   //debug set
+	//debug set
 	if c.debug {
 		log.Printf("full url path: %s", fullURLPath)
 	}
