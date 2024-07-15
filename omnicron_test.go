@@ -32,9 +32,9 @@ func (c *mockHTTPClient) Do(req *http.Request) (*http.Response, error) {
 func NewMockClient(response []byte, err error) *Client {
 	mockClient := &mockHTTPClient{Response: response, Err: err}
 	return &Client{
-		apikey:  "your-api-key",
-		baseurl: "https://custom-url.com",
-		httpClient:  mockClient,
+		apikey:     "your-api-key",
+		baseurl:    "https://custom-url.com",
+		httpClient: mockClient,
 	}
 }
 
@@ -92,10 +92,10 @@ func TestGrokChatCompletion(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			client := NewMockClient(tt.mockResponse, tt.mockError)
 			ctx := context.Background()
-           req := &GroqChatCompletionParams{
-             Messages: tt.args.messages,
-			 Model: tt.args.model,
-		   }
+			req := &GroqChatCompletionParams{
+				Messages: tt.args.messages,
+				Model:    tt.args.model,
+			}
 			_, err := client.GroqChatCompletion(ctx, req)
 
 			if tt.expectedError {

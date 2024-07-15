@@ -12,6 +12,101 @@ const (
 	ToolChoiceNone ToolChoice = "none"
 )
 
+type GroqChatCompletionResponse struct {
+	ID                string   `json:"id"`
+	Choices           []Choice `json:"choices"`
+	Created           int      `json:"created"`
+	Model             string   `json:"model"`
+	Object            string   `json:"object"`
+	SystemFingerprint string   `json:"systemFingerprint"`
+	Usage             Usage    `json:"usage,omitempty"`
+
+	Stream chan *ChatChunkCompletion `json:"-"`
+}
+
+type Choice struct {
+	FinishReason string         `json:"finishReason"`
+	Index        int            `json:"index"`
+	Logprobs     ChoiceLogprobs `json:"logprobs"`
+	Message      ChoiceMessage  `json:"message"`
+}
+type ChoiceMessageToolCall struct {
+	ID       *string                       `json:"id,omitempty"`
+	Function ChoiceMessageToolCallFunction `json:"function,omitempty"`
+	Type     *string                       `json:"type,omitempty"`
+}
+type ChoiceMessageToolCallFunction struct {
+	Arguments *string `json:"arguments,omitempty"`
+	Name      *string `json:"name,omitempty"`
+}
+type ChoiceMessage struct {
+	Content   string                  `json:"content"`
+	Role      string                  `json:"role"`
+	ToolCalls []ChoiceMessageToolCall `json:"toolCalls,omitempty"`
+}
+type ChoiceLogprobs struct {
+	Content []ChoiceLogprobsContent `json:"content,omitempty"`
+}
+type ChoiceLogprobsContent struct {
+	Token       *string                           `json:"token,omitempty"`
+	Bytes       []int                             `json:"bytes,omitempty"`
+	Logprob     *float64                          `json:"logprob,omitempty"`
+	TopLogprobs []ChoiceLogprobsContentTopLogprob `json:"topLogprobs,omitempty"`
+}
+type ChoiceLogprobsContentTopLogprob struct {
+	Token   *string  `json:"token,omitempty"`
+	Bytes   []int    `json:"bytes,omitempty"`
+	Logprob *float64 `json:"logprob,omitempty"`
+}
+
+type ChatChunkCompletion struct {
+	ID                *string       `json:"id"`
+	Choices           []ChoiceChunk `json:"choices"`
+	Created           *int          `json:"created"`
+	Model             *string       `json:"model"`
+	Object            *string       `json:"object"`
+	SystemFingerprint *string       `json:"systemFingerprint"`
+	XGroq             *XGroq        `json:"xGroq,omitempty"`
+	// contains filtered or unexported fields
+}
+type XGroq struct {
+	Usage Usage `json:"usage"`
+}
+type ChoiceChunk struct {
+	Delta        ChoiceDelta    `json:"delta"`
+	FinishReason string         `json:"finishReason"`
+	Index        int            `json:"index"`
+	Logprobs     ChoiceLogprobs `json:"logprobs"`
+}
+type ChoiceDelta struct {
+	Content      string                   `json:"content"`
+	Role         string                   `json:"role"`
+	FunctionCall *ChoiceDeltaFunctionCall `json:"functionCall,omitempty"`
+	ToolCalls    []ChoiceDeltaToolCall    `json:"toolCalls,omitempty"`
+}
+type ChoiceDeltaFunctionCall struct {
+	Arguments *string `json:"arguments,omitempty"`
+	Name      *string `json:"name,omitempty"`
+}
+type ChoiceDeltaToolCall struct {
+	Index    int                         `json:"index"`
+	ID       *string                     `json:"id,omitempty"`
+	Function ChoiceDeltaToolCallFunction `json:"function,omitempty"`
+	Type     *string                     `json:"type,omitempty"`
+}
+type ChoiceDeltaToolCallFunction struct {
+	Arguments *string `json:"arguments,omitempty"`
+	Name      *string `json:"name,omitempty"`
+}
+type Usage struct {
+	CompletionTime   *float64 `json:"completionTime,omitempty"`
+	CompletionTokens *int     `json:"completionTokens,omitempty"`
+	PromptTime       *float64 `json:"promptTime,omitempty"`
+	PromptTokens     *int     `json:"promptTokens,omitempty"`
+	QueueTime        *float64 `json:"queueTime,omitempty"`
+	TotalTime        *float64 `json:"totalTime,omitempty"`
+	TotalTokens      *int     `json:"totalTokens,omitempty"`
+}
 type Message struct {
 	Content    string            `json:"content"` // Required fields, not omitting in JSON
 	Role       string            `json:"role"`    // Required fields, not omitting in JSON
@@ -75,11 +170,8 @@ type GroqChatCompletionParams struct {
 	TopP             float32        `json:"top_p,omitempty"`
 	User             string         `json:"user,omitempty"`
 }
-type GroqChatResponse struct {
-	Content string `json:"content"`
-}
 
-func (c *Client) GroqChatCompletion(ctx context.Context, req *GroqChatCompletionParams) (*GroqChatResponse, error) {
+func (c *Client) GroqChatCompletion(ctx context.Context, req *GroqChatCompletionParams) (*GroqChatCompletionResponse, error) {
 	if len(req.Messages) == 0 {
 		return nil, ErrGroqChatCompletionNoMessage
 	}
@@ -90,9 +182,9 @@ func (c *Client) GroqChatCompletion(ctx context.Context, req *GroqChatCompletion
 	if err != nil {
 		return nil, err
 	}
-	var groqChatResponse GroqChatResponse
-	if err := json.Unmarshal(body, &groqChatResponse); err != nil {
+	var groqChatCompletionResponse GroqChatCompletionResponse
+	if err := json.Unmarshal(body, &groqChatCompletionResponse); err != nil {
 		return nil, err
 	}
-	return &groqChatResponse, nil
+	return &groqChatCompletionResponse, nil
 }

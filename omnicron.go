@@ -45,7 +45,7 @@ func WithDebug(debug bool) ClientOption {
 func NewClient(apiKey string, opts ...ClientOption) *Client {
 	c := &Client{
 		apikey:  apiKey,
-		debug: false,
+		debug:   false,
 		baseurl: "https://omnicron-latest.onrender.com/", //default base url for omnicron runs on 0.1 CPU 512 MB Ram
 	}
 	for _, opt := range opts {
@@ -57,35 +57,35 @@ func NewClient(apiKey string, opts ...ClientOption) *Client {
 
 	return c
 }
-func (c *Client) newJSONPostRequest(ctx context.Context, path, query string, payload interface{}) ([]byte, error){
+func (c *Client) newJSONPostRequest(ctx context.Context, path, query string, payload interface{}) ([]byte, error) {
 	fullURLPath := c.baseurl + "api/v1" + path
-    if query != "" {
+	if query != "" {
 		fullURLPath = c.withQueryParameters(fullURLPath, query)
 	}
 
-	if c.debug{
+	if c.debug {
 		log.Printf("full url path: %s", fullURLPath)
 	}
 
 	body, err := json.Marshal(payload)
-	if err!= nil {
-        return nil, err
-    }
+	if err != nil {
+		return nil, err
+	}
 	if c.debug {
 		log.Println(string(body))
 	}
 	httpReq, err := http.NewRequestWithContext(ctx, http.MethodPost, fullURLPath, bytes.NewReader(body))
-	if err!= nil {
-        return nil, err
-    }
-   httpReq.Header.Set("Content-Type", "application/json")
-   if c.apikey != ""{
-	 httpReq.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.apikey))
-   }
-   res, err := c.httpClient.Do(httpReq)
-   if err!= nil {
-        return nil, err
-    }
+	if err != nil {
+		return nil, err
+	}
+	httpReq.Header.Set("Content-Type", "application/json")
+	if c.apikey != "" {
+		httpReq.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.apikey))
+	}
+	res, err := c.httpClient.Do(httpReq)
+	if err != nil {
+		return nil, err
+	}
 	defer res.Body.Close()
 	resBody, err := io.ReadAll(res.Body)
 	if err != nil {
@@ -94,8 +94,8 @@ func (c *Client) newJSONPostRequest(ctx context.Context, path, query string, pay
 	if c.debug {
 		log.Println(string(resBody))
 	}
-	if res.StatusCode!= http.StatusOK {
-        errResp := ErrorResponse{}
+	if res.StatusCode != http.StatusOK {
+		errResp := ErrorResponse{}
 		if err := json.Unmarshal(resBody, &errResp); err != nil {
 			return nil, fmt.Errorf("error unmarshalling: %s", resBody)
 		}
