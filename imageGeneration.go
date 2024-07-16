@@ -25,14 +25,14 @@ const (
 
 // low image generation model because it doesn't support image to image processing
 type LowImageGenerationParams struct {
-	Prompt            string   `json:"prompt"`
-	Width             *int     `json:"width,omitempty"`
-	Height            *int     `json:"height,omitempty"`
-	Scheduler         *string  `json:"scheduler,omitempty"`
-	NumOutputs        *int     `json:"num_outputs,omitempty"`
-	GuidanceScale     *float64 `json:"guidance_scale,omitempty"`
-	NegativePrompt    *string  `json:"negative_prompt,omitempty"`
-	NumInferenceSteps *int     `json:"num_inference_steps,omitempty"`
+	Prompt            string   `form:"prompt"`
+	Width             *int     `form:"width,omitempty"`
+	Height            *int     `form:"height,omitempty"`
+	Scheduler         *string  `form:"scheduler,omitempty"`
+	NumOutputs        *int     `form:"num_outputs,omitempty"`
+	GuidanceScale     *float64 `form:"guidance_scale,omitempty"`
+	NegativePrompt    *string  `form:"negative_prompt,omitempty"`
+	NumInferenceSteps *int     `form:"num_inference_steps,omitempty"`
 }
 type LowImageGenerationModelAndParams struct {
 	Model      ReplicateLowImageGenerationModel
@@ -41,20 +41,20 @@ type LowImageGenerationModelAndParams struct {
 
 // high image generation model because it supports image to image processing
 type HighImageGenerationParams struct {
-	Prompt            string   `json:"prompt"`
-	Width             *int     `json:"width,omitempty"`
-	Height            *int     `json:"height,omitempty"`
-	Scheduler         *string  `json:"scheduler,omitempty"`
-	NumOutputs        *int     `json:"num_outputs,omitempty"`
-	GuidanceScale     *float64 `json:"guidance_scale,omitempty"`
-	NegativePrompt    *string  `json:"negative_prompt,omitempty"`
-	NumInferenceSteps *int     `json:"num_inference_steps,omitempty"`
-	LoraScale         *float64 `json:"lora_scale,omitempty"`
-	ImageFile         *os.File `json:"image_file,omitempty"`
-	MaskFile          *os.File `json:"mask_file,omitempty"`
-	PromptStrength    *float64 `json:"prompt_strength,omitempty"`
-	ApplyWatermark    *bool    `json:"apply_watermark,omitempty"`
-	Seed              *int     `json:"seed,omitempty"`
+	Prompt            string   `form:"prompt"`
+	Width             *int     `form:"width,omitempty"`
+	Height            *int     `form:"height,omitempty"`
+	Scheduler         *string  `form:"scheduler,omitempty"`
+	NumOutputs        *int     `form:"num_outputs,omitempty"`
+	GuidanceScale     *float64 `form:"guidance_scale,omitempty"`
+	NegativePrompt    *string  `form:"negative_prompt,omitempty"`
+	NumInferenceSteps *int     `form:"num_inference_steps,omitempty"`
+	LoraScale         *float64 `form:"lora_scale,omitempty"`
+	ImageFile         *os.File `form:"image,omitempty"`
+	MaskFile          *os.File `form:"mask,omitempty"`
+	PromptStrength    *float64 `form:"prompt_strength,omitempty"`
+	ApplyWatermark    *bool    `form:"apply_watermark,omitempty"`
+	Seed              *int     `form:"seed,omitempty"`
 }
 
 type HighImageGenerationModelAndParams struct {
@@ -66,7 +66,7 @@ func (c *Client) LowImageGeneration(ctx context.Context, req LowImageGenerationM
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}
-	body, err := c.newJSONPostRequest(ctx, "/replicate/imagegeneration", string(req.Model), req.Parameters)
+	body, err := c.newFormWithFilePostRequest(ctx, "/replicate/imagegeneration", string(req.Model), req.Parameters)
 	if err != nil {
 		return nil, err
 	}

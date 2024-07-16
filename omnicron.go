@@ -15,10 +15,12 @@ import (
 	"strconv"
 )
 
+// HTTPClient interface defines the Do method for HTTP requests.
 type HTTPClient interface {
 	Do(req *http.Request) (*http.Response, error)
 }
 
+// Client represents the client for the Omnicron API.
 type Client struct {
 	baseurl    string
 	apikey     string
@@ -26,29 +28,36 @@ type Client struct {
 	httpClient HTTPClient
 }
 
+// ClientOption is a type for setting options in the Client.
 type ClientOption func(*Client)
 
+// WithHTTPClient sets a custom HTTP client.
 func WithHTTPClient(httpClient *http.Client) ClientOption {
 	return func(c *Client) {
 		c.httpClient = httpClient
 	}
 }
+
+// WithBaseURL sets a custom base URL.
 func WithBaseURL(baseURL string) ClientOption {
 	return func(c *Client) {
 		c.baseurl = baseURL
 	}
 }
+
+// WithDebug enables or disables debug mode.
 func WithDebug(debug bool) ClientOption {
 	return func(c *Client) {
 		c.debug = debug
 	}
 }
 
+// NewClient creates a new Client with the given API key and options.
 func NewClient(apiKey string, opts ...ClientOption) *Client {
 	c := &Client{
 		apikey:  apiKey,
 		debug:   false,
-		baseurl: "https://omnicron-latest.onrender.com/", //default base url for omnicron runs on 0.1 CPU 512 MB Ram
+		baseurl: "https://omnicron-latest.onrender.com/", // default base URL for Omnicron
 	}
 	for _, opt := range opts {
 		opt(c)
@@ -56,17 +65,17 @@ func NewClient(apiKey string, opts ...ClientOption) *Client {
 	if c.httpClient == nil {
 		c.httpClient = http.DefaultClient
 	}
-
 	return c
 }
+
+// newJSONPostRequest sends a POST request with a JSON payload.
 func (c *Client) newJSONPostRequest(ctx context.Context, path, model string, payload interface{}) ([]byte, error) {
 	fullURLPath := c.baseurl + "api/v1" + path
 	if model != "" {
 		fullURLPath = c.withModelQueryParameters(fullURLPath, model)
 	}
-	//debug set
 	if c.debug {
-		log.Printf("full url path: %s", fullURLPath)
+		log.Printf("full URL path: %s", fullURLPath)
 	}
 
 	body, err := json.Marshal(payload)
@@ -76,6 +85,7 @@ func (c *Client) newJSONPostRequest(ctx context.Context, path, model string, pay
 	if c.debug {
 		log.Println(string(body))
 	}
+
 	httpReq, err := http.NewRequestWithContext(ctx, http.MethodPost, fullURLPath, bytes.NewReader(body))
 	if err != nil {
 		return nil, err
@@ -84,11 +94,13 @@ func (c *Client) newJSONPostRequest(ctx context.Context, path, model string, pay
 	if c.apikey != "" {
 		httpReq.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.apikey))
 	}
+
 	res, err := c.httpClient.Do(httpReq)
 	if err != nil {
 		return nil, err
 	}
 	defer res.Body.Close()
+
 	resBody, err := io.ReadAll(res.Body)
 	if err != nil {
 		return nil, err
@@ -105,18 +117,21 @@ func (c *Client) newJSONPostRequest(ctx context.Context, path, model string, pay
 	}
 	return resBody, nil
 }
+
+// newFormWithFilePostRequest sends a POST request with a multipart form-data payload.
 func (c *Client) newFormWithFilePostRequest(ctx context.Context, path, model string, payload interface{}) ([]byte, error) {
 	fullURLPath := c.baseurl + path
 	if model != "" {
 		fullURLPath = c.withModelQueryParameters(fullURLPath, model)
 	}
 	if c.debug {
-		log.Printf("full url path: %s", fullURLPath)
+		log.Printf("full URL path: %s", fullURLPath)
 	}
 
 	// Create a buffer to hold the form data
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
+
 	v := reflect.ValueOf(payload)
 	typeOfParams := v.Type()
 	for i := 0; i < v.NumField(); i++ {
@@ -134,54 +149,66 @@ func (c *Client) newFormWithFilePostRequest(ctx context.Context, path, model str
 		switch field.Interface().(type) {
 		case *os.File:
 			if fieldName == "image" || fieldName == "mask" {
-				addFileField(writer, fieldName, field.Interface().(*os.File))
+				if err := addFileField(writer, fieldName, field.Interface().(*os.File)); err != nil {
+					log.Printf("Error adding file field: %v", err)
+					return nil, err
+				}
 			}
 		case *int:
-			addField(writer, fieldName, strconv.Itoa(*field.Interface().(*int)))
+			if err := addField(writer, fieldName, strconv.Itoa(*field.Interface().(*int))); err != nil {
+				log.Printf("Error adding int field: %v", err)
+				return nil, err
+			}
 		case *float64:
-			addField(writer, fieldName, fmt.Sprintf("%f", *field.Interface().(*float64)))
+			if err := addField(writer, fieldName, fmt.Sprintf("%f", *field.Interface().(*float64))); err != nil {
+				log.Printf("Error adding float64 field: %v", err)
+				return nil, err
+			}
 		case *string:
-			addField(writer, fieldName, *field.Interface().(*string))
+			if err := addField(writer, fieldName, *field.Interface().(*string)); err != nil {
+				log.Printf("Error adding string field: %v", err)
+				return nil, err
+			}
 		case *bool:
-			addField(writer, fieldName, strconv.FormatBool(*field.Interface().(*bool)))
+			if err := addField(writer, fieldName, strconv.FormatBool(*field.Interface().(*bool))); err != nil {
+				log.Printf("Error adding bool field: %v", err)
+				return nil, err
+			}
 		default:
-			addField(writer, fieldName, fmt.Sprintf("%v", field.Interface()))
+			if err := addField(writer, fieldName, fmt.Sprintf("%v", field.Interface())); err != nil {
+				log.Printf("Error adding default field: %v", err)
+				return nil, err
+			}
 		}
 	}
+
 	writer.Close()
-	// Create a new POST request with the form data
+
 	httpReq, err := http.NewRequestWithContext(ctx, http.MethodPost, fullURLPath, body)
 	if err != nil {
 		return nil, err
 	}
 
-	// Set the content type to multipart/form-data
 	httpReq.Header.Set("Content-Type", writer.FormDataContentType())
-
-	// Set the Authorization header if an API key is provided
 	if c.apikey != "" {
 		httpReq.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.apikey))
 	}
 
-	// Send the request
 	res, err := c.httpClient.Do(httpReq)
 	if err != nil {
 		return nil, err
 	}
 	defer res.Body.Close()
 
-	// Read the response body
 	resBody, err := io.ReadAll(res.Body)
 	if err != nil {
 		return nil, err
 	}
 
-	// Log the response body if debug mode is enabled
 	if c.debug {
 		log.Println(string(resBody))
 	}
 
-	// Check for non-200 status codes and handle the error response
 	if res.StatusCode != http.StatusOK {
 		errResp := ErrorResponse{}
 		if err := json.Unmarshal(resBody, &errResp); err != nil {
@@ -197,14 +224,13 @@ func (c *Client) newFormWithFilePostRequest(ctx context.Context, path, model str
 func Ptr[T any](v T) *T {
 	return &v
 }
+
+// addField adds a form field with the given key and value.
 func addField(writer *multipart.Writer, key string, value string) error {
-	err := writer.WriteField(key, value)
-	if err != nil {
-		return err
-	}
-	return nil
+	return writer.WriteField(key, value)
 }
 
+// addFileField adds a file field to the multipart writer.
 func addFileField(writer *multipart.Writer, fieldname string, file *os.File) error {
 	defer file.Close()
 	fw, err := writer.CreateFormFile(fieldname, file.Name())
@@ -215,9 +241,10 @@ func addFileField(writer *multipart.Writer, fieldname string, file *os.File) err
 	return err
 }
 
+// withModelQueryParameters appends the model query parameter to the URL.
 func (c *Client) withModelQueryParameters(fullURLPath, model string) string {
 	params := url.Values{}
 	params.Add("model", model)
-	url := fullURLPath + "?" + params.Encode()
-	return url
+	return fullURLPath + "?" + params.Encode()
 }
+
