@@ -25,14 +25,14 @@ const (
 
 // low image generation model because it doesn't support image to image processing
 type LowImageGenerationParams struct {
-	Prompt            string   `form:"prompt"`
-	Width             *int     `form:"width,omitempty"`
-	Height            *int     `form:"height,omitempty"`
-	Scheduler         *string  `form:"scheduler,omitempty"`
-	NumOutputs        *int     `form:"num_outputs,omitempty"`
-	GuidanceScale     *float64 `form:"guidance_scale,omitempty"`
-	NegativePrompt    *string  `form:"negative_prompt,omitempty"`
-	NumInferenceSteps *int     `form:"num_inference_steps,omitempty"`
+	Prompt            string   `json:"prompt"`
+	Width             *int     `json:"width,omitempty"`
+	Height            *int     `json:"height,omitempty"`
+	Scheduler         *string  `json:"scheduler,omitempty"`
+	NumOutputs        *int     `json:"num_outputs,omitempty"`
+	GuidanceScale     *float64 `json:"guidance_scale,omitempty"`
+	NegativePrompt    *string  `json:"negative_prompt,omitempty"`
+	NumInferenceSteps *int     `json:"num_inference_steps,omitempty"`
 }
 type LowImageGenerationModelAndParams struct {
 	Model      ReplicateLowImageGenerationModel

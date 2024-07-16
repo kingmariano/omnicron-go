@@ -25,8 +25,8 @@ jobs:
         with:
           go-version-file: go.mod  # Ensures the Go version specified in go.mod is used
 
-      # - name: Run Linter
-      #   uses: golangci/golangci-lint-action@v3
+      - name: Run Linter
+        uses: golangci/golangci-lint-action@v3
 
       - name: Format code
         run: make fmt
