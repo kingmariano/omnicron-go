@@ -3,12 +3,10 @@ package omnicron
 import (
 	"bytes"
 	"context"
+	"github.com/stretchr/testify/assert"
 	"io"
 	"net/http"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
-	// "github.com/stretchr/testify/mock"
 )
 
 // MockHTTPClient is a mock implementation of the HTTPClient interface

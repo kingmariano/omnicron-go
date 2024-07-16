@@ -11,6 +11,8 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"reflect"
+	"strconv"
 )
 
 type HTTPClient interface {
@@ -57,10 +59,10 @@ func NewClient(apiKey string, opts ...ClientOption) *Client {
 
 	return c
 }
-func (c *Client) newJSONPostRequest(ctx context.Context, path, query string, payload interface{}) ([]byte, error) {
+func (c *Client) newJSONPostRequest(ctx context.Context, path, model string, payload interface{}) ([]byte, error) {
 	fullURLPath := c.baseurl + "api/v1" + path
-	if query != "" {
-		fullURLPath = c.withQueryParameters(fullURLPath, query)
+	if model != "" {
+		fullURLPath = c.withModelQueryParameters(fullURLPath, model)
 	}
 	//debug set
 	if c.debug {
@@ -103,10 +105,10 @@ func (c *Client) newJSONPostRequest(ctx context.Context, path, query string, pay
 	}
 	return resBody, nil
 }
-func (c *Client) newFormWithFilePostRequest(ctx context.Context, path, query string, formFields map[string]string, fileFields map[string]*os.File) ([]byte, error) {
+func (c *Client) newFormWithFilePostRequest(ctx context.Context, path, model string, payload interface{}) ([]byte, error) {
 	fullURLPath := c.baseurl + path
-	if query != "" {
-		fullURLPath = c.withQueryParameters(fullURLPath, query)
+	if model != "" {
+		fullURLPath = c.withModelQueryParameters(fullURLPath, model)
 	}
 	if c.debug {
 		log.Printf("full url path: %s", fullURLPath)
@@ -115,34 +117,38 @@ func (c *Client) newFormWithFilePostRequest(ctx context.Context, path, query str
 	// Create a buffer to hold the form data
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
+	v := reflect.ValueOf(payload)
+	typeOfParams := v.Type()
+	for i := 0; i < v.NumField(); i++ {
+		field := v.Field(i)
+		fieldName := typeOfParams.Field(i).Tag.Get("form")
 
-	// Add form fields to the form data
-	for key, value := range formFields {
-		err := writer.WriteField(key, value)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	// Add file fields to the form data
-	for fieldname, file := range fileFields {
-		fileWriter, err := writer.CreateFormFile(fieldname, file.Name())
-		if err != nil {
-			return nil, err
+		if fieldName == "" {
+			continue
 		}
 
-		_, err = io.Copy(fileWriter, file)
-		if err != nil {
-			return nil, err
+		if field.Kind() == reflect.Ptr && field.IsNil() {
+			continue
+		}
+
+		switch field.Interface().(type) {
+		case *os.File:
+			if fieldName == "image" || fieldName == "mask" {
+				addFileField(writer, fieldName, field.Interface().(*os.File))
+			}
+		case *int:
+			addField(writer, fieldName, strconv.Itoa(*field.Interface().(*int)))
+		case *float64:
+			addField(writer, fieldName, fmt.Sprintf("%f", *field.Interface().(*float64)))
+		case *string:
+			addField(writer, fieldName, *field.Interface().(*string))
+		case *bool:
+			addField(writer, fieldName, strconv.FormatBool(*field.Interface().(*bool)))
+		default:
+			addField(writer, fieldName, fmt.Sprintf("%v", field.Interface()))
 		}
 	}
-
-	// Close the writer to finalize the form data
-	err := writer.Close()
-	if err != nil {
-		return nil, err
-	}
-
+	writer.Close()
 	// Create a new POST request with the form data
 	httpReq, err := http.NewRequestWithContext(ctx, http.MethodPost, fullURLPath, body)
 	if err != nil {
@@ -191,10 +197,27 @@ func (c *Client) newFormWithFilePostRequest(ctx context.Context, path, query str
 func Ptr[T any](v T) *T {
 	return &v
 }
+func addField(writer *multipart.Writer, key string, value string) error {
+	err := writer.WriteField(key, value)
+	if err != nil {
+		return err
+	}
+	return nil
+}
 
-func (c *Client) withQueryParameters(fullURLPath, query string) string {
+func addFileField(writer *multipart.Writer, fieldname string, file *os.File) error {
+	defer file.Close()
+	fw, err := writer.CreateFormFile(fieldname, file.Name())
+	if err != nil {
+		return err
+	}
+	_, err = io.Copy(fw, file)
+	return err
+}
+
+func (c *Client) withModelQueryParameters(fullURLPath, model string) string {
 	params := url.Values{}
-	params.Add("model", query)
+	params.Add("model", model)
 	url := fullURLPath + "?" + params.Encode()
 	return url
 }
