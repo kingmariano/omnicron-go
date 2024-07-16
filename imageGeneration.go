@@ -1,3 +1,6 @@
+/* 
+This image generation function uses different and high efficient image generation AI models on Replicate. Please note that cost varies as you some of this model.
+*/
 package omnicron
 
 import (
@@ -6,24 +9,28 @@ import (
 	"os"
 )
 
-// image generations supports multiple image generation AI model on replicate.
-// defines the image generation models on replicate
-type ReplicateLowImageGenerationModel string  //doesn't support image to image processing
-type ReplicateHighImageGenerationModel string //supports image to image processing
+// ReplicateLowImageGenerationModel defines the low image generation models on Replicate.
+// These models do not support image-to-image processing.
+type ReplicateLowImageGenerationModel string
+
+// ReplicateHighImageGenerationModel defines the high image generation models on Replicate.
+// These models support image-to-image processing.
+type ReplicateHighImageGenerationModel string
+
 const (
-	//model on replicate: https://replicate.com/bytedance/sdxl-lightning-4step
+	// Model on Replicate: https://replicate.com/bytedance/sdxl-lightning-4step
 	SDXLLightning4stepModel ReplicateLowImageGenerationModel = "bytedance/sdxl-lightning-4step"
-	//model on replicate: https://replicate.com/lucataco/realvisxl-v2.0
+	// Model on Replicate: https://replicate.com/lucataco/realvisxl-v2.0
 	RealvisxlV20Model ReplicateHighImageGenerationModel = "lucataco/realvisxl-v2.0"
-	//model on replicate: https://replicate.com/playgroundai/playground-v2.5-1024px-aesthetic
+	// Model on Replicate: https://replicate.com/playgroundai/playground-v2.5-1024px-aesthetic
 	PlaygroundV251024pxAestheticModel ReplicateHighImageGenerationModel = "playgroundai/playground-v2.5-1024px-aesthetic"
-	//model on replicate: https://replicate.com/lucataco/dreamshaper-xl-turbo
+	// Model on Replicate: https://replicate.com/lucataco/dreamshaper-xl-turbo
 	DreamshaperXlTurboModel ReplicateLowImageGenerationModel = "lucataco/dreamshaper-xl-turbo"
-	//model on replicate: https://replicate.com/lorenzomarines/astra
+	// Model on Replicate: https://replicate.com/lorenzomarines/astra
 	AstraModel ReplicateHighImageGenerationModel = "lorenzomarines/astra"
 )
 
-// low image generation model because it doesn't support image to image processing
+// LowImageGenerationParams defines the parameters for low image generation models.
 type LowImageGenerationParams struct {
 	Prompt            string   `json:"prompt"`
 	Width             *int     `json:"width,omitempty"`
@@ -34,12 +41,14 @@ type LowImageGenerationParams struct {
 	NegativePrompt    *string  `json:"negative_prompt,omitempty"`
 	NumInferenceSteps *int     `json:"num_inference_steps,omitempty"`
 }
+
+// LowImageGenerationModelAndParams groups the low image generation model with its parameters.
 type LowImageGenerationModelAndParams struct {
 	Model      ReplicateLowImageGenerationModel
 	Parameters *LowImageGenerationParams
 }
 
-// high image generation model because it supports image to image processing
+// HighImageGenerationParams defines the parameters for high image generation models.
 type HighImageGenerationParams struct {
 	Prompt            string   `form:"prompt"`
 	Width             *int     `form:"width,omitempty"`
@@ -57,11 +66,13 @@ type HighImageGenerationParams struct {
 	Seed              *int     `form:"seed,omitempty"`
 }
 
+// HighImageGenerationModelAndParams groups the high image generation model with its parameters.
 type HighImageGenerationModelAndParams struct {
 	Model      ReplicateHighImageGenerationModel
 	Parameters *HighImageGenerationParams
 }
 
+// LowImageGeneration handles the low image generation request for models that do not support image-to-image processing.
 func (c *Client) LowImageGeneration(ctx context.Context, req LowImageGenerationModelAndParams) (*ReplicatePredictionResponse, error) {
 	if req.Model == "" {
 		return nil, ErrModelNotFound
@@ -77,6 +88,7 @@ func (c *Client) LowImageGeneration(ctx context.Context, req LowImageGenerationM
 	return &predictionResponse, nil
 }
 
+// HighImageGeneration handles the high image generation request for models that support image-to-image processing.
 func (c *Client) HighImageGeneration(ctx context.Context, req HighImageGenerationModelAndParams) (*ReplicatePredictionResponse, error) {
 	if req.Model == "" {
 		return nil, ErrModelNotFound
