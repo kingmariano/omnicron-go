@@ -120,7 +120,7 @@ func (c *Client) newJSONPostRequest(ctx context.Context, path, model string, pay
 
 // newFormWithFilePostRequest sends a POST request with a multipart form-data payload.
 func (c *Client) newFormWithFilePostRequest(ctx context.Context, path, model string, payload interface{}) ([]byte, error) {
-	fullURLPath := c.baseurl + path
+	fullURLPath := c.baseurl + "api/v1" + path
 	if model != "" {
 		fullURLPath = c.withModelQueryParameters(fullURLPath, model)
 	}
