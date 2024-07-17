@@ -1,4 +1,4 @@
-/* 
+/*
 This image generation function uses different and high efficient image generation AI models on Replicate. Please note that cost varies as you some of this model.
 */
 package omnicron

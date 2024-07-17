@@ -134,6 +134,7 @@ func (c *Client) newFormWithFilePostRequest(ctx context.Context, path, model str
 
 	v := reflect.ValueOf(payload)
 	typeOfParams := v.Type()
+
 	for i := 0; i < v.NumField(); i++ {
 		field := v.Field(i)
 		fieldName := typeOfParams.Field(i).Tag.Get("form")
@@ -148,11 +149,10 @@ func (c *Client) newFormWithFilePostRequest(ctx context.Context, path, model str
 
 		switch field.Interface().(type) {
 		case *os.File:
-			if fieldName == "image" || fieldName == "mask" {
-				if err := addFileField(writer, fieldName, field.Interface().(*os.File)); err != nil {
-					log.Printf("Error adding file field: %v", err)
-					return nil, err
-				}
+			log.Println("os.file is present")
+			if err := addFileField(writer, fieldName, field.Interface().(*os.File)); err != nil {
+				log.Printf("Error adding file field: %v", err)
+				return nil, err
 			}
 		case *int:
 			if err := addField(writer, fieldName, strconv.Itoa(*field.Interface().(*int))); err != nil {
@@ -247,4 +247,3 @@ func (c *Client) withModelQueryParameters(fullURLPath, model string) string {
 	params.Add("model", model)
 	return fullURLPath + "?" + params.Encode()
 }
-
