@@ -14,7 +14,7 @@ func main() {
 		Messages: []omnicron.Message{
 			{
 				Role:    "user",
-				Content: "Hello, what is AI?",
+				Content: "Hello?",
 			},
 		},
 	})
