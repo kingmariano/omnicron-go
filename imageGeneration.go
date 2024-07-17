@@ -77,7 +77,7 @@ func (c *Client) LowImageGeneration(ctx context.Context, req LowImageGenerationM
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}
-	body, err := c.newFormWithFilePostRequest(ctx, "/replicate/imagegeneration", string(req.Model), req.Parameters)
+	body, err := c.newJSONPostRequest(ctx, "/replicate/imagegeneration", string(req.Model), req.Parameters)
 	if err != nil {
 		return nil, err
 	}
