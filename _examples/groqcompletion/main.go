@@ -22,5 +22,5 @@ func main() {
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
-	fmt.Print(res.Content)
+	fmt.Println(res.Choices[0].Message.Content)
 }
