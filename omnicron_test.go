@@ -115,7 +115,7 @@ func TestGrokChatCompletion(t *testing.T) {
 // 	}
 // 	req := LowImageGenerationModelAndParams{
 // 		Model:      SDXLLightning4stepModel,
-// 		Parameters: &params,
+// 		Parameters: &paras,
 // 	}
 
 // 	ctx := context.Background()
