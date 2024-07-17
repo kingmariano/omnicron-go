@@ -69,7 +69,7 @@ type HighImageGenerationParams struct {
 // HighImageGenerationModelAndParams groups the high image generation model with its parameters.
 type HighImageGenerationModelAndParams struct {
 	Model      ReplicateHighImageGenerationModel
-	Parameters *HighImageGenerationParams
+	Parameters HighImageGenerationParams
 }
 
 // LowImageGeneration handles the low image generation request for models that do not support image-to-image processing.
