@@ -13,4 +13,4 @@ fmt:
 	$(GOFMT) -s -w .
 
 lint:
-    $(GOLINT) run	
+	$(GOLINT) run	
