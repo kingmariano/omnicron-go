@@ -2,6 +2,7 @@
 
 # Variables
 GOCMD = go
+GOLINT = golangci-lint
 GOFMT =  gofmt
 GOTEST = $(GOCMD) test
 
@@ -10,3 +11,6 @@ test:
 
 fmt:
 	$(GOFMT) -s -w .
+
+lint:
+    $(GOLINT) run	
