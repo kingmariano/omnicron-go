@@ -78,7 +78,7 @@ func (c *Client) LowMusicGeneration(ctx context.Context, req LowMusicGenerationM
 	}
 	return &predictionResponse, nil
 }
-func (c *Client) HighMusicGeneration(ctx context.Context, req HighImageGenerationModelAndParams) (*ReplicatePredictionResponse, error) {
+func (c *Client) HighMusicGeneration(ctx context.Context, req HighMusicGenerationModelAndParams) (*ReplicatePredictionResponse, error) {
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}
