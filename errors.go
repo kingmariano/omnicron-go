@@ -6,6 +6,7 @@ var ErrNoQueryParameter = errors.New("no query parameter specified")
 var ErrModelNotFound = errors.New("model not found")
 var ErrGroqChatCompletionNoMessage = errors.New("message field is required")
 var ErrPromptMissing = errors.New("prompt field is required")
+var ErrNoFileProvided = errors.New("no file provided")
 
 // ErrorResponse represents an error response from the API.
 type ErrorResponse struct {

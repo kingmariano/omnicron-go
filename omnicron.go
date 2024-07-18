@@ -13,13 +13,14 @@ import (
 	"os"
 	"reflect"
 	"strconv"
+	"strings"
 )
 
 // HTTPClient interface defines the Do method for HTTP requests.
 type HTTPClient interface {
 	Do(req *http.Request) (*http.Response, error)
 }
-
+const ApiVersion = "api/v1"
 // Client represents the client for the Omnicron API.
 type Client struct {
 	baseurl    string
@@ -70,7 +71,7 @@ func NewClient(apiKey string, opts ...ClientOption) *Client {
 
 // newJSONPostRequest sends a POST request with a JSON payload.
 func (c *Client) newJSONPostRequest(ctx context.Context, path, model string, payload interface{}) ([]byte, error) {
-	fullURLPath := c.baseurl + "api/v1" + path
+	fullURLPath := c.baseurl + ApiVersion + path
 	if model != "" {
 		fullURLPath = c.withModelQueryParameters(fullURLPath, model)
 	}
@@ -120,7 +121,7 @@ func (c *Client) newJSONPostRequest(ctx context.Context, path, model string, pay
 
 // newFormWithFilePostRequest sends a POST request with a multipart form-data payload.
 func (c *Client) newFormWithFilePostRequest(ctx context.Context, path, model string, payload interface{}) ([]byte, error) {
-	fullURLPath := c.baseurl + "api/v1" + path
+	fullURLPath := c.baseurl + ApiVersion + path
 	if model != "" {
 		fullURLPath = c.withModelQueryParameters(fullURLPath, model)
 	}
@@ -149,32 +150,49 @@ func (c *Client) newFormWithFilePostRequest(ctx context.Context, path, model str
 
 		switch field.Interface().(type) {
 		case *os.File:
-			log.Println("os.file is present")
+			if c.debug {
+				log.Printf("file is present, fieldname is %s", fieldName)
+			}
 			if err := addFileField(writer, fieldName, field.Interface().(*os.File)); err != nil {
 				log.Printf("Error adding file field: %v", err)
 				return nil, err
 			}
 		case *int:
+			if c.debug {
+				log.Printf("int is present, fieldname is %s", fieldName)
+			}
 			if err := addField(writer, fieldName, strconv.Itoa(*field.Interface().(*int))); err != nil {
 				log.Printf("Error adding int field: %v", err)
 				return nil, err
 			}
 		case *float64:
+			if c.debug {
+				log.Printf("float64 is present, fieldname is %s", fieldName)
+			}
 			if err := addField(writer, fieldName, fmt.Sprintf("%f", *field.Interface().(*float64))); err != nil {
 				log.Printf("Error adding float64 field: %v", err)
 				return nil, err
 			}
 		case *string:
+			if c.debug {
+				log.Printf("string is present, fieldname is %s", fieldName)
+			}
 			if err := addField(writer, fieldName, *field.Interface().(*string)); err != nil {
 				log.Printf("Error adding string field: %v", err)
 				return nil, err
 			}
 		case *bool:
+			if c.debug {
+				log.Printf("bool is present, fieldname is %s", fieldName)
+			}
 			if err := addField(writer, fieldName, strconv.FormatBool(*field.Interface().(*bool))); err != nil {
 				log.Printf("Error adding bool field: %v", err)
 				return nil, err
 			}
 		default:
+			if c.debug {
+				log.Printf("Default type, fieldname is required:%s", fieldName)
+			}
 			if err := addField(writer, fieldName, fmt.Sprintf("%v", field.Interface())); err != nil {
 				log.Printf("Error adding default field: %v", err)
 				return nil, err
@@ -227,18 +245,37 @@ func Ptr[T any](v T) *T {
 
 // addField adds a form field with the given key and value.
 func addField(writer *multipart.Writer, key string, value string) error {
-	return writer.WriteField(key, value)
+	key = formatFieldName(key)
+	err := writer.WriteField(key, value)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // addFileField adds a file field to the multipart writer.
 func addFileField(writer *multipart.Writer, fieldname string, file *os.File) error {
 	defer file.Close()
+	fieldname = formatFieldName(fieldname)
+	if file == nil {
+		return ErrNoFileProvided
+	}
+
 	fw, err := writer.CreateFormFile(fieldname, file.Name())
 	if err != nil {
 		return err
 	}
 	_, err = io.Copy(fw, file)
-	return err
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// formats the field name, removes the ",omitempty"
+func formatFieldName(key string) string {
+	keySlice := strings.Split(key, ",")
+	return keySlice[0]
 }
 
 // withModelQueryParameters appends the model query parameter to the URL.
