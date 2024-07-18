@@ -20,8 +20,8 @@ const (
 	// Model on Replicate: https://replicate.com/nightmareai/real-esrgan
 	RealErsgan ReplicateLowImageUpscaleGenerationModel = "nightmareai/real-esrgan"
 
-	// Model on Replicate: https://replicate.com/nightmareai/real-esrgan
-	ClarityUpscaler ReplicateHighImageUpscaleGenerationModel = "nightmareai/real-esrgan"
+	// Model on Replicate: https://replicate.com/philz1337x/clarity-upscaler
+	ClarityUpscaler ReplicateHighImageUpscaleGenerationModel = "philz1337x/clarity-upscaler"
 )
 
 type LowImageUpscaleGenerationParams struct {
