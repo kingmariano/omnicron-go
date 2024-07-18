@@ -38,14 +38,14 @@ type LowMusicGenerationParams struct {
 type HighMusicGenerationParams struct {
 	Prompt                 string          `form:"prompt"`
 	ModelVersion           *string         `form:"model_version,omitempty"`
-	InputAudioFile         *os.File `form:"input_audio_file,omitempty"`
-	Duration               *int            `form:"duration,omitempty"`
+	InputAudioFile         *os.File      `form:"input_audio_file,omitempty"`
+	Duration               *int               `form:"duration,omitempty"`
 	Continuation           *bool           `form:"continuation,omitempty"`
 	ContinuationStart      *int            `form:"continuation_start,omitempty"`
 	ContinuationEnd        *int            `form:"continuation_end,omitempty"`
 	MultiBandDiffusion     *bool           `form:"multi_band_diffusion,omitempty"`
 	NormalizationStrategy  *string         `form:"normalization_strategy,omitempty"`
-	TopK                   *int            `form:"top_k,omitempty"`
+	TopK                   *int                 `form:"top_k,omitempty"`
 	TopP                   *float64        `form:"top_p,omitempty"`
 	Temperature            *float64        `form:"temperature,omitempty"`
 	ClassifierFreeGuidance *int            `form:"classifier_free_guidance,omitempty"`
