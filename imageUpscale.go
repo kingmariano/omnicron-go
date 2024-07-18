@@ -18,10 +18,10 @@ type ReplicateHighImageUpscaleGenerationModel string
 const (
 
 	// Model on Replicate: https://replicate.com/nightmareai/real-esrgan
-	RealErsgan ReplicateLowImageUpscaleGenerationModel = "nightmareai/real-esrgan"
+	RealErsganModel ReplicateLowImageUpscaleGenerationModel = "nightmareai/real-esrgan"
 
 	// Model on Replicate: https://replicate.com/philz1337x/clarity-upscaler
-	ClarityUpscaler ReplicateHighImageUpscaleGenerationModel = "philz1337x/clarity-upscaler"
+	ClarityUpscalerModel ReplicateHighImageUpscaleGenerationModel = "philz1337x/clarity-upscaler"
 )
 
 type LowImageUpscaleGenerationParams struct {
@@ -62,7 +62,7 @@ type HighImageUpscaleGenerationModelAndParams struct {
 	Parameters HighImageUpscaleGenerationParams
 }
 
-func (c *Client) LowImageUpscaleGeneration(ctx context.Context, req LowImageUpscaleGenerationModelAndParams) (*ReplicatePredictionResponse, error) {
+func (c *Client) LowImageUpscaling(ctx context.Context, req LowImageUpscaleGenerationModelAndParams) (*ReplicatePredictionResponse, error) {
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}
@@ -77,7 +77,7 @@ func (c *Client) LowImageUpscaleGeneration(ctx context.Context, req LowImageUpsc
 	return &predictionResponse, nil
 }
 
-func (c *Client) HighImageUpscaleGeneration(ctx context.Context, req HighImageUpscaleGenerationModelAndParams) (*ReplicatePredictionResponse, error) {
+func (c *Client) HighImageUpscaling(ctx context.Context, req HighImageUpscaleGenerationModelAndParams) (*ReplicatePredictionResponse, error) {
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}
