@@ -20,7 +20,7 @@ import (
 type HTTPClient interface {
 	Do(req *http.Request) (*http.Response, error)
 }
-const ApiVersion = "api/v1"
+const APIVersion = "api/v1"
 // Client represents the client for the Omnicron API.
 type Client struct {
 	baseurl    string
@@ -71,7 +71,7 @@ func NewClient(apiKey string, opts ...ClientOption) *Client {
 
 // newJSONPostRequest sends a POST request with a JSON payload.
 func (c *Client) newJSONPostRequest(ctx context.Context, path, model string, payload interface{}) ([]byte, error) {
-	fullURLPath := c.baseurl + ApiVersion + path
+	fullURLPath := c.baseurl + APIVersion + path
 	if model != "" {
 		fullURLPath = c.withModelQueryParameters(fullURLPath, model)
 	}
@@ -121,7 +121,7 @@ func (c *Client) newJSONPostRequest(ctx context.Context, path, model string, pay
 
 // newFormWithFilePostRequest sends a POST request with a multipart form-data payload.
 func (c *Client) newFormWithFilePostRequest(ctx context.Context, path, model string, payload interface{}) ([]byte, error) {
-	fullURLPath := c.baseurl + ApiVersion + path
+	fullURLPath := c.baseurl + APIVersion + path
 	if model != "" {
 		fullURLPath = c.withModelQueryParameters(fullURLPath, model)
 	}
