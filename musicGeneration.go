@@ -10,7 +10,7 @@ import (
 )
 
 // These models is described low cause it doesnt support an input audio file for the music generation
-type ReplicateLowMusicGenerationModel string 
+type ReplicateLowMusicGenerationModel string
 
 // These models is described high cause it supports an input audio file for the music generation
 type ReplicateHighMusicGenerationModel string
@@ -21,7 +21,7 @@ const (
 	RiffusionModel ReplicateLowMusicGenerationModel = "riffusion/riffusion"
 
 	// Model on Replicate: https://replicate.com/meta/musicgen
-    MetaMusicGenModel ReplicateHighMusicGenerationModel = "meta/musicgen"
+	MetaMusicGenModel ReplicateHighMusicGenerationModel = "meta/musicgen"
 )
 
 // LowMusicGenerationParams groups the low music generation model with its parameters.
@@ -36,22 +36,35 @@ type LowMusicGenerationParams struct {
 
 // HighMusicGenerationParams groups the high music generation model with its parameters
 type HighMusicGenerationParams struct {
-	Prompt                 string          `form:"prompt"`
-	ModelVersion           *string         `form:"model_version,omitempty"`
-	InputAudioFile         *os.File      `form:"input_audio_file,omitempty"`
-	Duration               *int               `form:"duration,omitempty"`
-	Continuation           *bool           `form:"continuation,omitempty"`
-	ContinuationStart      *int            `form:"continuation_start,omitempty"`
-	ContinuationEnd        *int            `form:"continuation_end,omitempty"`
-	MultiBandDiffusion     *bool           `form:"multi_band_diffusion,omitempty"`
-	NormalizationStrategy  *string         `form:"normalization_strategy,omitempty"`
-	TopK                   *int                 `form:"top_k,omitempty"`
-	TopP                   *float64        `form:"top_p,omitempty"`
-	Temperature            *float64        `form:"temperature,omitempty"`
-	ClassifierFreeGuidance *int            `form:"classifier_free_guidance,omitempty"`
-	OutputFormat           *string         `form:"output_format,omitempty"`
+	Prompt                 string   `form:"prompt"`
+	ModelVersion           *string  `form:"model_version,omitempty"`
+	InputAudioFile         *os.File `form:"input_audio_file,omitempty"`
+	Duration               *int     `form:"duration,omitempty"`
+	Continuation           *bool    `form:"continuation,omitempty"`
+	ContinuationStart      *int     `form:"continuation_start,omitempty"`
+	ContinuationEnd        *int     `form:"continuation_end,omitempty"`
+	MultiBandDiffusion     *bool    `form:"multi_band_diffusion,omitempty"`
+	NormalizationStrategy  *string  `form:"normalization_strategy,omitempty"`
+	TopK                   *int     `form:"top_k,omitempty"`
+	TopP                   *float64 `form:"top_p,omitempty"`
+	Temperature            *float64 `form:"temperature,omitempty"`
+	ClassifierFreeGuidance *int     `form:"classifier_free_guidance,omitempty"`
+	OutputFormat           *string  `form:"output_format,omitempty"`
 }
-func (c *Client) LowMusicGeneration(ctx context.Context, req LowImageGenerationModelAndParams)(*ReplicatePredictionResponse, error){
+
+// LowMusicGenerationModelAndParams groups the low image generation model with its parameters.
+type LowMusicGenerationModelAndParams struct {
+	Model      ReplicateLowMusicGenerationModel
+	Parameters *LowMusicGenerationParams
+}
+
+// HighMusicGenerationModelAndParams groups the high image generation model with its parameters.
+type HighMusicGenerationModelAndParams struct {
+	Model      ReplicateHighMusicGenerationModel
+	Parameters HighImageGenerationModelAndParams
+}
+
+func (c *Client) LowMusicGeneration(ctx context.Context, req LowMusicGenerationModelAndParams) (*ReplicatePredictionResponse, error) {
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}
@@ -60,9 +73,9 @@ func (c *Client) LowMusicGeneration(ctx context.Context, req LowImageGenerationM
 		return nil, err
 	}
 	var predictionResponse ReplicatePredictionResponse
-	if err := json.Unmarshal(body, &predictionResponse); err!= nil {
-        return nil, err
-    }
+	if err := json.Unmarshal(body, &predictionResponse); err != nil {
+		return nil, err
+	}
 	return &predictionResponse, nil
 }
 func (c *Client) HighMusicGeneration(ctx context.Context, req HighImageGenerationModelAndParams) (*ReplicatePredictionResponse, error) {
