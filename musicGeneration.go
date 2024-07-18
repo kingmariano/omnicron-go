@@ -34,7 +34,7 @@ type LowMusicGenerationParams struct {
 	SeedImageID       *string  `json:"seed_image_id,omitempty"`
 }
 
-// HighMusicGenerationParams groups the high music generation model with its parameters.
+// HighMusicGenerationParams groups the high music generation model with its parameters
 type HighMusicGenerationParams struct {
 	Prompt                 string          `form:"prompt"`
 	ModelVersion           *string         `form:"model_version,omitempty"`
