@@ -57,7 +57,7 @@ type LowImageUpscaleGenerationModelAndParams struct {
 
 // HighImageUpscaleGenerationModelAndParams groups the high imageupscale generation model with its parameters.
 type HighImageUpscaleGenerationModelAndParams struct {
-	Model      ReplicateHighMusicGenerationModel
+	Model      ReplicateHighImageUpscaleGenerationModel
 	Parameters HighImageUpscaleGenerationParams
 }
 
