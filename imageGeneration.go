@@ -59,8 +59,8 @@ type HighImageGenerationParams struct {
 	NegativePrompt    *string  `form:"negative_prompt,omitempty"`
 	NumInferenceSteps *int     `form:"num_inference_steps,omitempty"`
 	LoraScale         *float64 `form:"lora_scale,omitempty"`
-	ImageFile         *os.File `form:"image,omitempty"`
-	MaskFile          *os.File `form:"mask,omitempty"`
+	Image         *os.File `form:"image,omitempty"`
+	Mask          *os.File `form:"mask,omitempty"`
 	PromptStrength    *float64 `form:"prompt_strength,omitempty"`
 	ApplyWatermark    *bool    `form:"apply_watermark,omitempty"`
 	Seed              *int     `form:"seed,omitempty"`

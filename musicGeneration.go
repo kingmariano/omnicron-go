@@ -24,7 +24,6 @@ const (
 	MetaMusicGenModel ReplicateHighMusicGenerationModel = "meta/musicgen"
 )
 
-// LowMusicGenerationParams groups the low music generation model with its parameters.
 type LowMusicGenerationParams struct {
 	PromptA           string   `json:"prompt_a"`
 	Denoising         *float64 `json:"denoising,omitempty"`
@@ -34,11 +33,11 @@ type LowMusicGenerationParams struct {
 	SeedImageID       *string  `json:"seed_image_id,omitempty"`
 }
 
-// HighMusicGenerationParams groups the high music generation model with its parameters
+
 type HighMusicGenerationParams struct {
 	Prompt                 string   `form:"prompt"`
 	ModelVersion           *string  `form:"model_version,omitempty"`
-	InputAudioFile         *os.File `form:"input_audio,omitempty"`
+	InputAudio         *os.File `form:"input_audio,omitempty"`
 	Duration               *int     `form:"duration,omitempty"`
 	Continuation           *bool    `form:"continuation,omitempty"`
 	ContinuationStart      *int     `form:"continuation_start,omitempty"`
@@ -52,13 +51,13 @@ type HighMusicGenerationParams struct {
 	OutputFormat           *string  `form:"output_format,omitempty"`
 }
 
-// LowMusicGenerationModelAndParams groups the low image generation model with its parameters.
+// LowMusicGenerationModelAndParams groups the low music generation model with its parameters.
 type LowMusicGenerationModelAndParams struct {
 	Model      ReplicateLowMusicGenerationModel
 	Parameters *LowMusicGenerationParams
 }
 
-// HighMusicGenerationModelAndParams groups the high image generation model with its parameters.
+// HighMusicGenerationModelAndParams groups the high music generation model with its parameters.
 type HighMusicGenerationModelAndParams struct {
 	Model      ReplicateHighMusicGenerationModel
 	Parameters HighMusicGenerationParams

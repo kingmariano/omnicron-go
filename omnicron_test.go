@@ -141,7 +141,7 @@ func TestHighImageGeneration(t *testing.T) {
 		Width:     Ptr(1280),
         Height:    Ptr(720),
         Scheduler: Ptr("cloud"),
-		ImageFile: file,
+		Image: file,
 	}
 	req := HighImageGenerationModelAndParams{
 		Model:      RealvisxlV20Model,
