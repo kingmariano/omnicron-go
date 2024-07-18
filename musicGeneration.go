@@ -61,7 +61,7 @@ type LowMusicGenerationModelAndParams struct {
 // HighMusicGenerationModelAndParams groups the high image generation model with its parameters.
 type HighMusicGenerationModelAndParams struct {
 	Model      ReplicateHighMusicGenerationModel
-	Parameters HighImageGenerationModelAndParams
+	Parameters HighMusicGenerationParams
 }
 
 func (c *Client) LowMusicGeneration(ctx context.Context, req LowMusicGenerationModelAndParams) (*ReplicatePredictionResponse, error) {
