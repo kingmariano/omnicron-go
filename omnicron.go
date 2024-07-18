@@ -20,7 +20,9 @@ import (
 type HTTPClient interface {
 	Do(req *http.Request) (*http.Response, error)
 }
+
 const APIVersion = "api/v1"
+
 // Client represents the client for the Omnicron API.
 type Client struct {
 	baseurl    string

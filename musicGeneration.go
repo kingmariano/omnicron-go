@@ -33,11 +33,10 @@ type LowMusicGenerationParams struct {
 	SeedImageID       *string  `json:"seed_image_id,omitempty"`
 }
 
-
 type HighMusicGenerationParams struct {
 	Prompt                 string   `form:"prompt"`
 	ModelVersion           *string  `form:"model_version,omitempty"`
-	InputAudio         *os.File `form:"input_audio,omitempty"`
+	InputAudio             *os.File `form:"input_audio,omitempty"`
 	Duration               *int     `form:"duration,omitempty"`
 	Continuation           *bool    `form:"continuation,omitempty"`
 	ContinuationStart      *int     `form:"continuation_start,omitempty"`

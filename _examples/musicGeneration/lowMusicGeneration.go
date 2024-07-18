@@ -16,13 +16,13 @@ func main() {
 		Model: omnicron.RiffusionModel,
 		Parameters: &omnicron.LowMusicGenerationParams{
 			PromptA: "funky synth solo bass",
-			Alpha: omnicron.Ptr(0.6),
+			Alpha:   omnicron.Ptr(0.6),
 		},
 	})
-	if err!= nil {
-        fmt.Printf("Error making HighImageGeneration request: %v\n", err)
-        return
-    }
+	if err != nil {
+		fmt.Printf("Error making HighImageGeneration request: %v\n", err)
+		return
+	}
 
 	// Marshal the response to JSON
 	jsonData, err := json.MarshalIndent(res, "", "  ")

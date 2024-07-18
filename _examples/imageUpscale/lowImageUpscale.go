@@ -13,20 +13,20 @@ func main() {
 	apiKey := "YOUR_API_KEY"
 	client := omnicron.NewClient(apiKey, omnicron.WithBaseURL("https://omnicron-latest.onrender.com/"))
 	imageFile, err := os.Open("images.jpg")
-	if err!= nil {
-        fmt.Printf("Error opening image file: %v\n", err)
-        return
-    }
+	if err != nil {
+		fmt.Printf("Error opening image file: %v\n", err)
+		return
+	}
 	res, err := client.LowImageUpscaleGeneration(context.Background(), omnicron.LowImageUpscaleGenerationModelAndParams{
 		Model: omnicron.RealErsgan,
 		Parameters: omnicron.LowImageUpscaleGenerationParams{
-            Image: imageFile,
+			Image: imageFile,
 		},
 	})
-	if err!= nil {
-        fmt.Printf("Error making Low ImageUpscaleGeneration request: %v\n", err)
-        return
-    }
+	if err != nil {
+		fmt.Printf("Error making Low ImageUpscaleGeneration request: %v\n", err)
+		return
+	}
 
 	// Marshal the response to JSON
 	jsonData, err := json.MarshalIndent(res, "", "  ")

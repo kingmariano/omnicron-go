@@ -15,20 +15,20 @@ func main() {
 	res, err := client.LowImageGeneration(context.Background(), omnicron.LowImageGenerationModelAndParams{
 		Model: omnicron.SDXLLightning4stepModel,
 		Parameters: &omnicron.LowImageGenerationParams{
-			Prompt: "self-portrait of a woman, lightning in the background",
-			Width: omnicron.Ptr(1024),
-			Height: omnicron.Ptr(1024),
-            Scheduler:         omnicron.Ptr("K_EULER"),
-            NumOutputs:        omnicron.Ptr(1),
-            GuidanceScale:     omnicron.Ptr(7.5),
-            NegativePrompt:    omnicron.Ptr("mountains, sky, clouds"),
+			Prompt:            "self-portrait of a woman, lightning in the background",
+			Width:             omnicron.Ptr(1024),
+			Height:            omnicron.Ptr(1024),
+			Scheduler:         omnicron.Ptr("K_EULER"),
+			NumOutputs:        omnicron.Ptr(1),
+			GuidanceScale:     omnicron.Ptr(7.5),
+			NegativePrompt:    omnicron.Ptr("mountains, sky, clouds"),
 			NumInferenceSteps: omnicron.Ptr(2000),
 		},
 	})
-	if err!= nil {
-        fmt.Printf("Error making Low ImageGeneration request: %v\n", err)
-        return
-    }
+	if err != nil {
+		fmt.Printf("Error making Low ImageGeneration request: %v\n", err)
+		return
+	}
 
 	// Marshal the response to JSON
 	jsonData, err := json.MarshalIndent(res, "", "  ")

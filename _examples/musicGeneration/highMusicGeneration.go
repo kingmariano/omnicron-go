@@ -13,24 +13,23 @@ func main() {
 	apiKey := "YOUR_API_KEY"
 	client := omnicron.NewClient(apiKey, omnicron.WithBaseURL("https://omnicron-latest.onrender.com/"))
 	musicFile, err := os.Open("sample1.wav") // smaple music file
-	if err!= nil {
-        fmt.Printf("Error opening image file: %v\n", err)
-        return
-    }
+	if err != nil {
+		fmt.Printf("Error opening image file: %v\n", err)
+		return
+	}
 	res, err := client.HighMusicGeneration(context.Background(), omnicron.HighMusicGenerationModelAndParams{
 		Model: omnicron.MetaMusicGenModel,
 		Parameters: omnicron.HighMusicGenerationParams{
-             Prompt: "Create a vibrant Afrobeat track inspired by Nigerian music culture ",
-			 TopK: omnicron.Ptr(255),
-			ModelVersion: omnicron.Ptr("melody-large"),
+			Prompt:         "Create a vibrant Afrobeat track inspired by Nigerian music culture ",
+			TopK:           omnicron.Ptr(255),
+			ModelVersion:   omnicron.Ptr("melody-large"),
 			InputAudioFile: musicFile,
-
 		},
 	})
-	if err!= nil {
-        fmt.Printf("Error making HighImageGeneration request: %v\n", err)
-        return
-    }
+	if err != nil {
+		fmt.Printf("Error making HighImageGeneration request: %v\n", err)
+		return
+	}
 
 	// Marshal the response to JSON
 	jsonData, err := json.MarshalIndent(res, "", "  ")

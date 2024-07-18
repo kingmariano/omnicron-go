@@ -25,13 +25,13 @@ const (
 )
 
 type LowImageUpscaleGenerationParams struct {
-	Image   *os.File `form:"image"`
+	Image       *os.File `form:"image"`
 	Scale       *float64 `form:"scale,omitempty"`
 	FaceEnhance *bool    `form:"face_enhance,omitempty"`
 }
 
 type HighImageUpscaleGenerationParams struct {
-	Image             *os.File `form:"image"`
+	Image                 *os.File `form:"image"`
 	Prompt                *string  `form:"prompt,omitempty"`
 	NegativePrompt        *string  `form:"negative_prompt,omitempty"`
 	ScaleFactor           *float64 `form:"scale_factor,omitempty"`
@@ -49,6 +49,7 @@ type HighImageUpscaleGenerationParams struct {
 	Sharpen               *float64 `form:"sharpen,omitempty"`
 	OutputFormat          *string  `form:"output_format,omitempty"`
 }
+
 // LowImageUpscaleGenerationModelAndParams groups the low imageupscale generation model with its parameters.
 type LowImageUpscaleGenerationModelAndParams struct {
 	Model      ReplicateLowImageUpscaleGenerationModel
@@ -78,15 +79,15 @@ func (c *Client) LowImageUpscaleGeneration(ctx context.Context, req LowImageUpsc
 
 func (c *Client) HighImageUpscaleGeneration(ctx context.Context, req HighImageUpscaleGenerationModelAndParams) (*ReplicatePredictionResponse, error) {
 	if req.Model == "" {
-        return nil, ErrModelNotFound
-    }
-    body, err := c.newFormWithFilePostRequest(ctx, "/replicate/imageupscale", string(req.Model), req.Parameters)
-    if err!= nil {
-        return nil, err
-    }
-    var predictionResponse ReplicatePredictionResponse
-    if err := json.Unmarshal(body, &predictionResponse); err!= nil {
-        return nil, err
-    }
-    return &predictionResponse, nil
+		return nil, ErrModelNotFound
+	}
+	body, err := c.newFormWithFilePostRequest(ctx, "/replicate/imageupscale", string(req.Model), req.Parameters)
+	if err != nil {
+		return nil, err
+	}
+	var predictionResponse ReplicatePredictionResponse
+	if err := json.Unmarshal(body, &predictionResponse); err != nil {
+		return nil, err
+	}
+	return &predictionResponse, nil
 }

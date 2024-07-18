@@ -139,9 +139,9 @@ func TestHighImageGeneration(t *testing.T) {
 	params := HighImageGenerationParams{
 		Prompt:    "A beautiful sunset over a lake",
 		Width:     Ptr(1280),
-        Height:    Ptr(720),
-        Scheduler: Ptr("cloud"),
-		Image: file,
+		Height:    Ptr(720),
+		Scheduler: Ptr("cloud"),
+		Image:     file,
 	}
 	req := HighImageGenerationModelAndParams{
 		Model:      RealvisxlV20Model,
@@ -155,32 +155,32 @@ func TestHighImageGeneration(t *testing.T) {
 
 }
 
-func TestFormatFieldName(t *testing.T){
+func TestFormatFieldName(t *testing.T) {
 	tests := []struct {
-		name string
-        input string
-        expected string
+		name     string
+		input    string
+		expected string
 	}{
 		{
-          name: "No special character",
-		  input: "field",
-		  expected: "field",
+			name:     "No special character",
+			input:    "field",
+			expected: "field",
 		},
 		{
-          name: "special characater no comma, underscore present",
-		  input: "field_name",
-		  expected: "field_name",
+			name:     "special characater no comma, underscore present",
+			input:    "field_name",
+			expected: "field_name",
 		},
 		{
-          name: "special character comma",
-		  input: "field_name,omitempty",
-		  expected: "field_name",
+			name:     "special character comma",
+			input:    "field_name,omitempty",
+			expected: "field_name",
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-            actual := formatFieldName(tt.input)
-            assert.Equal(t, tt.expected, actual)
-        })
+			actual := formatFieldName(tt.input)
+			assert.Equal(t, tt.expected, actual)
+		})
 	}
 }
