@@ -38,7 +38,7 @@ type LowMusicGenerationParams struct {
 type HighMusicGenerationParams struct {
 	Prompt                 string   `form:"prompt"`
 	ModelVersion           *string  `form:"model_version,omitempty"`
-	InputAudioFile         *os.File `form:"input_audio_file,omitempty"`
+	InputAudioFile         *os.File `form:"input_audio,omitempty"`
 	Duration               *int     `form:"duration,omitempty"`
 	Continuation           *bool    `form:"continuation,omitempty"`
 	ContinuationStart      *int     `form:"continuation_start,omitempty"`
