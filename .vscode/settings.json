@@ -1,0 +1,15 @@
+{
+    "go.lintFlags": [
+      "--exclude",
+      "_examples"
+    ],
+    "go.vetFlags": [
+      "--exclude",
+      "_examples"
+    ],
+    "go.lintTool": "staticcheck",
+    "go.inlayHints.rangeVariableTypes": true,
+    "go.inlayHints.parameterNames": true,
+    "go.inlayHints.functionTypeParameters": true
+  }
+  
