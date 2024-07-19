@@ -17,7 +17,6 @@ func main() {
 		Model: omnicron.ZeroScopeV2XLModel,
 		Parameters: omnicron.HighVideoGenerationParams{
 			Prompt: "Create a 30-second animated video showcasing a futuristic cityscape at night, with flying cars, neon lights, and bustling streets.",
-			
 		},
 	})
 	if err != nil {
