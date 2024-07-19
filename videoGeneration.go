@@ -19,7 +19,7 @@ const  (
 type HighVideoGenerationParams struct {
 	Prompt            string          `json:"prompt"`
 	NegativePrompt    *string         `json:"negative_prompt,omitempty"`
-	Video     *os.File `json:"video,omitempty"`
+	InitVideo     *os.File `json:"init_video,omitempty"`
 	InitWeight        *float64        `json:"init_weight,omitempty"`
 	NumFrames         *int            `json:"num_frames,omitempty"`
 	NumInferenceSteps *int            `json:"num_inferences_steps,omitempty"`
