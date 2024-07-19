@@ -48,7 +48,7 @@ func (c *Client) LowSTTGeneration(ctx context.Context, req LowSTTModelAndParams)
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}
-	body, err := c.newFormWithFilePostRequest(ctx, "/replicate/tts", string(req.Model), req.Parameters)
+	body, err := c.newFormWithFilePostRequest(ctx, "/replicate/stt", string(req.Model), req.Parameters)
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +62,7 @@ func (c *Client) HighSTTGeneration(ctx context.Context, req HighSTTModelAndParam
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}
-	body, err := c.newFormWithFilePostRequest(ctx, "/replicate/tts", string(req.Model), req.Parameters)
+	body, err := c.newFormWithFilePostRequest(ctx, "/replicate/stt", string(req.Model), req.Parameters)
 	if err != nil {
 		return nil, err
 	}
