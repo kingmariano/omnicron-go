@@ -19,19 +19,19 @@ const (
 	InsanelyFastWhisperWithVideoModel ReplicateHighSTTModel = "turian/insanely-fast-whisper-with-video"
 )
 type LowSTTParams struct {
-	Audio               *os.File `json:"audio"`
-	Transcription           *string         `json:"transcription,omitempty"`
-	Temperature             *float64        `json:"temperature,omitempty"`
-	Translate               *bool           `json:"translate,omitempty"`
-	InitialPrompt           *string         `json:"initial_prompt,omitempty"`
-	ConditionOnPreviousText *bool           `json:"condition_on_previous_text,omitempty"`
+	Audio               *os.File `form:"audio"`
+	Transcription           *string         `form:"transcription,omitempty"`
+	Temperature             *float64        `form:"temperature,omitempty"`
+	Translate               *bool           `form:"translate,omitempty"`
+	InitialPrompt           *string         `form:"initial_prompt,omitempty"`
+	ConditionOnPreviousText *bool           `form:"condition_on_previous_text,omitempty"`
 }
 type HighSTTParams struct {
-	AudioFile *os.File `json:"audio_file"`
-	URL       *string         `json:"url,omitempty"`
-	Task      *string         `json:"task,omitempty"`
-	BatchSize *int            `json:"batch_size,omitempty"`
-	Timestamp *string         `json:"timestamp,omitempty"`
+	AudioFile *os.File `form:"audio"`
+	URL       *string         `form:"url,omitempty"`
+	Task      *string         `form:"task,omitempty"`
+	BatchSize *int            `form:"batch_size,omitempty"`
+	Timestamp *string         `form:"timestamp,omitempty"`
 }
 
 type LowSTTModelAndParams struct{
