@@ -76,7 +76,7 @@ func (c *Client) LowTTSGeneration(ctx context.Context, req LowTTSModelAndParams)
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}
-	body, err := c.newJSONPostRequest(ctx, "/replicate/tts", string(req.Model), req.Parameters)
+	body, err := c.newFormWithFilePostRequest(ctx, "/replicate/tts", string(req.Model), req.Parameters)
 	if err != nil {
 		return nil, err
 	}
@@ -91,7 +91,7 @@ func (c *Client) MediumTTSGeneration(ctx context.Context, req MediumTTSModelAndP
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}
-	body, err := c.newJSONPostRequest(ctx, "/replicate/tts", string(req.Model), req.Parameters)
+	body, err := c.newFormWithFilePostRequest(ctx, "/replicate/tts", string(req.Model), req.Parameters)
 	if err != nil {
 		return nil, err
 	}
@@ -106,7 +106,7 @@ func (c *Client) HighTTSGeneration(ctx context.Context, req HighTTSModelAndParam
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}
-	body, err := c.newJSONPostRequest(ctx, "/replicate/tts", string(req.Model), req.Parameters)
+	body, err := c.newFormWithFilePostRequest(ctx, "/replicate/tts", string(req.Model), req.Parameters)
 	if err != nil {
 		return nil, err
 	}
