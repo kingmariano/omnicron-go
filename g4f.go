@@ -17,9 +17,6 @@ func (c *Client) GPT4Free(ctx context.Context, req *G4FRequest) (*GabsContainer,
 	if len(req.Messages) == 0 {
 		return nil, ErrGroqChatCompletionNoMessage
 	}
-	if req.Model == "" {
-		return nil, ErrModelNotFound
-	}
 	body, err := c.newJSONPostRequest(ctx, "/gpt4free", "", req)
 	if err != nil {
 		return nil, err
