@@ -152,3 +152,7 @@ type Usage struct {
 	TotalTime        *float64 `json:"totalTime,omitempty"`
 	TotalTokens      *int     `json:"totalTokens,omitempty"`
 }
+
+type Responseparams struct {
+	Response string `json:"response"`
+}
