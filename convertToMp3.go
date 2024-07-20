@@ -11,7 +11,7 @@ type ConvertToMP3Params struct {
 	File *os.File `form:"file,omitempty"`
 }
 // convert to mp3 function accepts the request parameters converts either the URL string or audio file to mp3 and then returns the result clouding direct url.
-func (c *Client) ConvertToMP3(ctx context.Context, req *ConvertToMP3Params) (*Responseparams, error){
+func (c *Client) ConvertToMP3(ctx context.Context, req ConvertToMP3Params) (*Responseparams, error){
 	if req.URL == "" && req.File == nil {
         return nil, ErrConvertToMP3NoURLOrFile
     }
