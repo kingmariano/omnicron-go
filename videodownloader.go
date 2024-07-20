@@ -11,7 +11,7 @@ type VideoDownloadParams struct {
 	// resolution could be 1080p, 720p, 480p, 240p depending on the youtube. leave blank If you are not sure.
 	Resolution string `json:"resolution,omitempty"`
 }
-
+// this download video function downloads the video url from any of the supported sites uploads to cloudinary and returns the direct download url
 func (c *Client) DownloadVideo(ctx context.Context, req *VideoDownloadParams) (*Responseparams, error){
 	if req.URL == ""{
 		return nil, ErrVideoDownloadNoURLProvided
