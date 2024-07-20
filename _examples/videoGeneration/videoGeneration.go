@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	apiKey := "HwikyHTrh4DMP9ZV1PzOn3K+C4Il7N/RKurD5AjyoIE="
+	apiKey := "YOUR_API_KEY"
 	client := omnicron.NewClient(apiKey, omnicron.WithBaseURL("https://omnicron-latest.onrender.com/"))
 
 	res, err := client.VideoGeneration(context.Background(), omnicron.HighVideoGenerationModelAndParams{
