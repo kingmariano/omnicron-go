@@ -15,7 +15,7 @@ func (c *Client) ConvertToMP3(ctx context.Context, req ConvertToMP3Params) (*Res
 	if req.URL == "" && req.File == nil {
         return nil, ErrConvertToMP3NoURLOrFile
     }
-    body, err := c.newFormWithFilePostRequest(ctx, "/convert/tomp3", "", req)
+    body, err := c.newFormWithFilePostRequest(ctx, "/convert2mp3", "", req)
     if err!= nil {
         return nil, err
     }
