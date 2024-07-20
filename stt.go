@@ -2,7 +2,6 @@ package omnicron
 
 import (
 	"context"
-	"encoding/json"
 	"os"
 )
 
@@ -10,41 +9,43 @@ import (
 
 type ReplicateLowSTTModel string
 
-type ReplicateHighSTTModel string 
+type ReplicateHighSTTModel string
 
 const (
 	// Model on Replicate: https://replicate.com/openai/whisper
 	WhisperModel ReplicateLowSTTModel = "openai/whisper"
-    // Model on Replicate: https://replicate.com/turian/insanely-fast-whisper-with-video
+	// Model on Replicate: https://replicate.com/turian/insanely-fast-whisper-with-video
 	InsanelyFastWhisperWithVideoModel ReplicateHighSTTModel = "turian/insanely-fast-whisper-with-video"
 )
+
 type LowSTTParams struct {
-	Audio               *os.File `form:"audio"`
-	Transcription           *string         `form:"transcription,omitempty"`
-	Temperature             *float64        `form:"temperature,omitempty"`
-	Translate               *bool           `form:"translate,omitempty"`
-	InitialPrompt           *string         `form:"initial_prompt,omitempty"`
-	ConditionOnPreviousText *bool           `form:"condition_on_previous_text,omitempty"`
+	Audio                   *os.File `form:"audio"`
+	Transcription           *string  `form:"transcription,omitempty"`
+	Temperature             *float64 `form:"temperature,omitempty"`
+	Translate               *bool    `form:"translate,omitempty"`
+	InitialPrompt           *string  `form:"initial_prompt,omitempty"`
+	ConditionOnPreviousText *bool    `form:"condition_on_previous_text,omitempty"`
 }
 type HighSTTParams struct {
 	AudioFile *os.File `form:"audio"`
-	URL       *string         `form:"url,omitempty"`
-	Task      *string         `form:"task,omitempty"`
-	BatchSize *int            `form:"batch_size,omitempty"`
-	Timestamp *string         `form:"timestamp,omitempty"`
+	URL       *string  `form:"url,omitempty"`
+	Task      *string  `form:"task,omitempty"`
+	BatchSize *int     `form:"batch_size,omitempty"`
+	Timestamp *string  `form:"timestamp,omitempty"`
 }
 
-type LowSTTModelAndParams struct{
-	Model ReplicateLowSTTModel
+type LowSTTModelAndParams struct {
+	Model      ReplicateLowSTTModel
 	Parameters LowSTTParams
 }
 
-type HighSTTModelAndParams struct{
-    Model ReplicateHighSTTModel
-    Parameters HighSTTParams
+type HighSTTModelAndParams struct {
+	Model      ReplicateHighSTTModel
+	Parameters HighSTTParams
 }
+
 // speech to text generation function
-func (c *Client) LowSTTGeneration(ctx context.Context, req LowSTTModelAndParams) (*ReplicatePredictionResponse, error) {
+func (c *Client) LowSTTGeneration(ctx context.Context, req LowSTTModelAndParams) (*ResponseMsg, error) {
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}
@@ -52,13 +53,13 @@ func (c *Client) LowSTTGeneration(ctx context.Context, req LowSTTModelAndParams)
 	if err != nil {
 		return nil, err
 	}
-	var predictionResponse ReplicatePredictionResponse
-	if err := json.Unmarshal(body, &predictionResponse); err != nil {
+	lowSTTGenResponse, err := unmarshalJSONResponse(body)
+	if err != nil {
 		return nil, err
 	}
-	return &predictionResponse, nil
+	return lowSTTGenResponse, nil
 }
-func (c *Client) HighSTTGeneration(ctx context.Context, req HighSTTModelAndParams) (*ReplicatePredictionResponse, error) {
+func (c *Client) HighSTTGeneration(ctx context.Context, req HighSTTModelAndParams) (*ResponseMsg, error) {
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}
@@ -66,9 +67,9 @@ func (c *Client) HighSTTGeneration(ctx context.Context, req HighSTTModelAndParam
 	if err != nil {
 		return nil, err
 	}
-	var predictionResponse ReplicatePredictionResponse
-	if err := json.Unmarshal(body, &predictionResponse); err != nil {
+	highSTTGenResponse, err := unmarshalJSONResponse(body)
+	if err != nil {
 		return nil, err
 	}
-	return &predictionResponse, nil
+	return highSTTGenResponse, nil
 }

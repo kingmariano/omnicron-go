@@ -2,7 +2,6 @@ package omnicron
 
 import (
 	"context"
-	"encoding/json"
 	"os"
 )
 
@@ -72,7 +71,7 @@ type HighTTSModelAndParams struct {
 	Parameters HighTTSParams
 }
 
-func (c *Client) LowTTSGeneration(ctx context.Context, req LowTTSModelAndParams) (*ReplicatePredictionResponse, error) {
+func (c *Client) LowTTSGeneration(ctx context.Context, req LowTTSModelAndParams) (*ResponseMsg, error) {
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}
@@ -80,14 +79,14 @@ func (c *Client) LowTTSGeneration(ctx context.Context, req LowTTSModelAndParams)
 	if err != nil {
 		return nil, err
 	}
-	var predictionResponse ReplicatePredictionResponse
-	if err := json.Unmarshal(body, &predictionResponse); err != nil {
+	lowTTSGenResponse, err := unmarshalJSONResponse(body)
+	if err != nil {
 		return nil, err
 	}
-	return &predictionResponse, nil
+	return lowTTSGenResponse, nil
 }
 
-func (c *Client) MediumTTSGeneration(ctx context.Context, req MediumTTSModelAndParams) (*ReplicatePredictionResponse, error) {
+func (c *Client) MediumTTSGeneration(ctx context.Context, req MediumTTSModelAndParams) (*ResponseMsg, error) {
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}
@@ -95,14 +94,14 @@ func (c *Client) MediumTTSGeneration(ctx context.Context, req MediumTTSModelAndP
 	if err != nil {
 		return nil, err
 	}
-	var predictionResponse ReplicatePredictionResponse
-	if err := json.Unmarshal(body, &predictionResponse); err != nil {
+	mediumTTSGenResponse, err := unmarshalJSONResponse(body)
+	if err != nil {
 		return nil, err
 	}
-	return &predictionResponse, nil
+	return mediumTTSGenResponse, nil
 }
 
-func (c *Client) HighTTSGeneration(ctx context.Context, req HighTTSModelAndParams) (*ReplicatePredictionResponse, error) {
+func (c *Client) HighTTSGeneration(ctx context.Context, req HighTTSModelAndParams) (*ResponseMsg, error) {
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}
@@ -110,9 +109,9 @@ func (c *Client) HighTTSGeneration(ctx context.Context, req HighTTSModelAndParam
 	if err != nil {
 		return nil, err
 	}
-	var predictionResponse ReplicatePredictionResponse
-	if err := json.Unmarshal(body, &predictionResponse); err != nil {
+	highTTSGenResponse, err := unmarshalJSONResponse(body)
+	if err != nil {
 		return nil, err
 	}
-	return &predictionResponse, nil
+	return highTTSGenResponse, nil
 }

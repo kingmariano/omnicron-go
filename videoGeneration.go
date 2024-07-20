@@ -5,7 +5,6 @@ package omnicron
 
 import (
 	"context"
-	"encoding/json"
 	"os"
 )
 
@@ -38,7 +37,7 @@ type HighVideoGenerationModelAndParams struct {
 	Parameters HighVideoGenerationParams
 }
 
-func (c *Client) VideoGeneration(ctx context.Context, req HighVideoGenerationModelAndParams) (*ReplicatePredictionResponse, error) {
+func (c *Client) VideoGeneration(ctx context.Context, req HighVideoGenerationModelAndParams) (*ResponseMsg, error) {
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}
@@ -50,9 +49,9 @@ func (c *Client) VideoGeneration(ctx context.Context, req HighVideoGenerationMod
 	if err != nil {
 		return nil, err
 	}
-	var predictionResponse ReplicatePredictionResponse
-	if err := json.Unmarshal(body, &predictionResponse); err != nil {
+	videoGenResponse, err := unmarshalJSONResponse(body)
+	if err != nil {
 		return nil, err
 	}
-	return &predictionResponse, nil
+	return videoGenResponse, nil
 }

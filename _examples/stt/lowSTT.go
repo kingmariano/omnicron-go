@@ -12,7 +12,7 @@ import (
 func main() {
 	apiKey := "YOUR_API_KEY"
 	client := omnicron.NewClient(apiKey, omnicron.WithBaseURL("https://omnicron-latest.onrender.com/"))
-    audioFile, err := os.Open("sample.mp3")
+	audioFile, err := os.Open("sample.mp3")
 	if err != nil {
 		fmt.Printf("Error opening image file: %v\n", err)
 		return

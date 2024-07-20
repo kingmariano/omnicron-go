@@ -12,7 +12,7 @@ import (
 func main() {
 	apiKey := "YOUR_API_KEY"
 	client := omnicron.NewClient(apiKey, omnicron.WithBaseURL("https://omnicron-latest.onrender.com/"))
-    audioFile, err := os.Open("sample.mp3")
+	audioFile, err := os.Open("sample.mp3")
 	if err != nil {
 		fmt.Printf("Error opening image file: %v\n", err)
 		return
@@ -20,8 +20,8 @@ func main() {
 	res, err := client.LowTTSGeneration(context.Background(), omnicron.LowTTSModelAndParams{
 		Model: omnicron.XTTSV2Model,
 		Parameters: omnicron.LowTTSParams{
-			Text: "say this is a good time to start coding.",
-             Speaker: audioFile,
+			Text:    "say this is a good time to start coding.",
+			Speaker: audioFile,
 		},
 	})
 	if err != nil {

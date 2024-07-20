@@ -5,7 +5,6 @@ package omnicron
 
 import (
 	"context"
-	"encoding/json"
 	"os"
 )
 
@@ -62,7 +61,7 @@ type HighMusicGenerationModelAndParams struct {
 	Parameters HighMusicGenerationParams
 }
 
-func (c *Client) LowMusicGeneration(ctx context.Context, req LowMusicGenerationModelAndParams) (*ReplicatePredictionResponse, error) {
+func (c *Client) LowMusicGeneration(ctx context.Context, req LowMusicGenerationModelAndParams) (*ResponseMsg, error) {
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}
@@ -70,13 +69,13 @@ func (c *Client) LowMusicGeneration(ctx context.Context, req LowMusicGenerationM
 	if err != nil {
 		return nil, err
 	}
-	var predictionResponse ReplicatePredictionResponse
-	if err := json.Unmarshal(body, &predictionResponse); err != nil {
+	lowMusicGenResponse, err := unmarshalJSONResponse(body)
+	if err != nil {
 		return nil, err
 	}
-	return &predictionResponse, nil
+	return lowMusicGenResponse, nil
 }
-func (c *Client) HighMusicGeneration(ctx context.Context, req HighMusicGenerationModelAndParams) (*ReplicatePredictionResponse, error) {
+func (c *Client) HighMusicGeneration(ctx context.Context, req HighMusicGenerationModelAndParams) (*ResponseMsg, error) {
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}
@@ -88,9 +87,9 @@ func (c *Client) HighMusicGeneration(ctx context.Context, req HighMusicGeneratio
 	if err != nil {
 		return nil, err
 	}
-	var predictionResponse ReplicatePredictionResponse
-	if err := json.Unmarshal(body, &predictionResponse); err != nil {
+	highMusicGenResponse, err := unmarshalJSONResponse(body)
+	if err != nil {
 		return nil, err
 	}
-	return &predictionResponse, nil
+	return highMusicGenResponse, nil
 }

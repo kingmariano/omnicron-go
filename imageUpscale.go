@@ -5,7 +5,6 @@ package omnicron
 
 import (
 	"context"
-	"encoding/json"
 	"os"
 )
 
@@ -62,7 +61,7 @@ type HighImageUpscaleGenerationModelAndParams struct {
 	Parameters HighImageUpscaleGenerationParams
 }
 
-func (c *Client) LowImageUpscaling(ctx context.Context, req LowImageUpscaleGenerationModelAndParams) (*ReplicatePredictionResponse, error) {
+func (c *Client) LowImageUpscaling(ctx context.Context, req LowImageUpscaleGenerationModelAndParams) (*ResponseMsg, error) {
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}
@@ -70,14 +69,14 @@ func (c *Client) LowImageUpscaling(ctx context.Context, req LowImageUpscaleGener
 	if err != nil {
 		return nil, err
 	}
-	var predictionResponse ReplicatePredictionResponse
-	if err := json.Unmarshal(body, &predictionResponse); err != nil {
+	lowImageUpscaleResponse, err := unmarshalJSONResponse(body)
+	if err != nil {
 		return nil, err
 	}
-	return &predictionResponse, nil
+	return lowImageUpscaleResponse, nil
 }
 
-func (c *Client) HighImageUpscaling(ctx context.Context, req HighImageUpscaleGenerationModelAndParams) (*ReplicatePredictionResponse, error) {
+func (c *Client) HighImageUpscaling(ctx context.Context, req HighImageUpscaleGenerationModelAndParams) (*ResponseMsg, error) {
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}
@@ -85,9 +84,9 @@ func (c *Client) HighImageUpscaling(ctx context.Context, req HighImageUpscaleGen
 	if err != nil {
 		return nil, err
 	}
-	var predictionResponse ReplicatePredictionResponse
-	if err := json.Unmarshal(body, &predictionResponse); err != nil {
+	highImageUpscaleResponse, err := unmarshalJSONResponse(body)
+	if err != nil {
 		return nil, err
 	}
-	return &predictionResponse, nil
+	return highImageUpscaleResponse, nil
 }

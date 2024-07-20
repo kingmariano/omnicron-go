@@ -5,7 +5,6 @@ package omnicron
 
 import (
 	"context"
-	"encoding/json"
 	"os"
 )
 
@@ -73,7 +72,7 @@ type HighImageGenerationModelAndParams struct {
 }
 
 // LowImageGeneration handles the low image generation request for models that do not support image-to-image processing.
-func (c *Client) LowImageGeneration(ctx context.Context, req LowImageGenerationModelAndParams) (*ReplicatePredictionResponse, error) {
+func (c *Client) LowImageGeneration(ctx context.Context, req LowImageGenerationModelAndParams) (*ResponseMsg, error) {
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}
@@ -81,15 +80,15 @@ func (c *Client) LowImageGeneration(ctx context.Context, req LowImageGenerationM
 	if err != nil {
 		return nil, err
 	}
-	var predictionResponse ReplicatePredictionResponse
-	if err := json.Unmarshal(body, &predictionResponse); err != nil {
+	lowImageGenResponse, err := unmarshalJSONResponse(body)
+	if err != nil {
 		return nil, err
 	}
-	return &predictionResponse, nil
+	return lowImageGenResponse, nil
 }
 
 // HighImageGeneration handles the high image generation request for models that support image-to-image processing.
-func (c *Client) HighImageGeneration(ctx context.Context, req HighImageGenerationModelAndParams) (*ReplicatePredictionResponse, error) {
+func (c *Client) HighImageGeneration(ctx context.Context, req HighImageGenerationModelAndParams) (*ResponseMsg, error) {
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}
@@ -101,9 +100,9 @@ func (c *Client) HighImageGeneration(ctx context.Context, req HighImageGeneratio
 	if err != nil {
 		return nil, err
 	}
-	var predictionResponse ReplicatePredictionResponse
-	if err := json.Unmarshal(body, &predictionResponse); err != nil {
+	highImageGenResponse, err := unmarshalJSONResponse(body)
+	if err != nil {
 		return nil, err
 	}
-	return &predictionResponse, nil
+	return highImageGenResponse, nil
 }

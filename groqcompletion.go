@@ -2,7 +2,6 @@ package omnicron
 
 import (
 	"context"
-	"encoding/json"
 )
 
 type ToolChoice string
@@ -76,7 +75,7 @@ type GroqChatCompletionParams struct {
 	User             string         `json:"user,omitempty"`
 }
 
-func (c *Client) GroqChatCompletion(ctx context.Context, req *GroqChatCompletionParams) (*GroqChatCompletionResponse, error) {
+func (c *Client) GroqChatCompletion(ctx context.Context, req *GroqChatCompletionParams) (*ResponseMsg, error) {
 	if len(req.Messages) == 0 {
 		return nil, ErrGroqChatCompletionNoMessage
 	}
@@ -87,9 +86,9 @@ func (c *Client) GroqChatCompletion(ctx context.Context, req *GroqChatCompletion
 	if err != nil {
 		return nil, err
 	}
-	var groqChatCompletionResponse GroqChatCompletionResponse
-	if err := json.Unmarshal(body, &groqChatCompletionResponse); err != nil {
+	groqChatCompletionResponse, err := unmarshalJSONResponse(body)
+	if err != nil {
 		return nil, err
 	}
-	return &groqChatCompletionResponse, nil
+	return groqChatCompletionResponse, nil
 }

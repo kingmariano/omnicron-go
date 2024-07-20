@@ -1,12 +1,14 @@
 run:
   timeout: 5m
   issues-exit-code: 1
+
 issues:
   exclude-rules:
     - path: _test\.go
       linters:
         - errcheck
         - bodyclose
+
 linters:
   enable:
     - govet
@@ -17,3 +19,4 @@ linters:
     - tparallel
     - errcheck
     - gosimple
+    - gosec

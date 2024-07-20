@@ -12,7 +12,7 @@ import (
 func main() {
 	apiKey := "YOUR_API_KEY"
 	client := omnicron.NewClient(apiKey, omnicron.WithBaseURL("https://omnicron-latest.onrender.com/"))
-    audioFile, err := os.Open("sample.mp3")
+	audioFile, err := os.Open("sample.mp3")
 	if err != nil {
 		fmt.Printf("Error opening image file: %v\n", err)
 		return
@@ -20,7 +20,7 @@ func main() {
 	res, err := client.HighTTSGeneration(context.Background(), omnicron.HighTTSModelAndParams{
 		Model: omnicron.OpenVoiceModel,
 		Parameters: omnicron.HighTTSParams{
-			Text: "Did you ever hear a folk tale about a giant turtle or is it just me?",
+			Text:  "Did you ever hear a folk tale about a giant turtle or is it just me?",
 			Audio: audioFile,
 		},
 	})

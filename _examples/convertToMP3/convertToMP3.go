@@ -13,9 +13,9 @@ func main() {
 	apiKey := "YOUR_API_KEY"
 	audioFile, err := os.Open("sample1.wav")
 	if err != nil {
-        fmt.Printf("Error converting file to mp3: %v\n", err)
-        return
-    }
+		fmt.Printf("Error converting file to mp3: %v\n", err)
+		return
+	}
 	client := omnicron.NewClient(apiKey, omnicron.WithBaseURL("https://omnicron-latest.onrender.com/"))
 	res, err := client.ConvertToMP3(context.Background(), omnicron.ConvertToMP3Params{
 		File: audioFile,
