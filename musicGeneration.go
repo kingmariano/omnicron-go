@@ -61,7 +61,7 @@ type HighMusicGenerationModelAndParams struct {
 	Parameters HighMusicGenerationParams
 }
 
-func (c *Client) LowMusicGeneration(ctx context.Context, req LowMusicGenerationModelAndParams) (*ResponseMsg, error) {
+func (c *Client) LowMusicGeneration(ctx context.Context, req LowMusicGenerationModelAndParams) (*GabsContainer, error) {
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}
@@ -75,7 +75,7 @@ func (c *Client) LowMusicGeneration(ctx context.Context, req LowMusicGenerationM
 	}
 	return lowMusicGenResponse, nil
 }
-func (c *Client) HighMusicGeneration(ctx context.Context, req HighMusicGenerationModelAndParams) (*ResponseMsg, error) {
+func (c *Client) HighMusicGeneration(ctx context.Context, req HighMusicGenerationModelAndParams) (*GabsContainer, error) {
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}

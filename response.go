@@ -1,15 +1,14 @@
 package omnicron
 
-import "encoding/json"
-
-type ResponseMsg struct {
-	Response interface{} `json:"response"`
-}
-
-func unmarshalJSONResponse(body []byte) (*ResponseMsg, error) {
-	var responseParams ResponseMsg
-	if err := json.Unmarshal(body, &responseParams); err != nil {
-		return nil, err
-	}
-	return &responseParams, nil
+import (
+	"github.com/Jeffail/gabs/v2"
+)
+//using the gabs library for dynamic JSON handling
+type GabsContainer = gabs.Container
+func unmarshalJSONResponse(body []byte) (*GabsContainer, error) {
+	container, err := gabs.ParseJSON(body)
+	if err!= nil {
+        return nil, err
+    }
+	return container, nil
 }

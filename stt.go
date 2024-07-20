@@ -45,7 +45,7 @@ type HighSTTModelAndParams struct {
 }
 
 // speech to text generation function
-func (c *Client) LowSTTGeneration(ctx context.Context, req LowSTTModelAndParams) (*ResponseMsg, error) {
+func (c *Client) LowSTTGeneration(ctx context.Context, req LowSTTModelAndParams) (*GabsContainer, error) {
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}
@@ -59,7 +59,7 @@ func (c *Client) LowSTTGeneration(ctx context.Context, req LowSTTModelAndParams)
 	}
 	return lowSTTGenResponse, nil
 }
-func (c *Client) HighSTTGeneration(ctx context.Context, req HighSTTModelAndParams) (*ResponseMsg, error) {
+func (c *Client) HighSTTGeneration(ctx context.Context, req HighSTTModelAndParams) (*GabsContainer, error) {
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}

@@ -71,7 +71,7 @@ type HighTTSModelAndParams struct {
 	Parameters HighTTSParams
 }
 
-func (c *Client) LowTTSGeneration(ctx context.Context, req LowTTSModelAndParams) (*ResponseMsg, error) {
+func (c *Client) LowTTSGeneration(ctx context.Context, req LowTTSModelAndParams) (*GabsContainer, error) {
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}
@@ -86,7 +86,7 @@ func (c *Client) LowTTSGeneration(ctx context.Context, req LowTTSModelAndParams)
 	return lowTTSGenResponse, nil
 }
 
-func (c *Client) MediumTTSGeneration(ctx context.Context, req MediumTTSModelAndParams) (*ResponseMsg, error) {
+func (c *Client) MediumTTSGeneration(ctx context.Context, req MediumTTSModelAndParams) (*GabsContainer, error) {
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}
@@ -101,7 +101,7 @@ func (c *Client) MediumTTSGeneration(ctx context.Context, req MediumTTSModelAndP
 	return mediumTTSGenResponse, nil
 }
 
-func (c *Client) HighTTSGeneration(ctx context.Context, req HighTTSModelAndParams) (*ResponseMsg, error) {
+func (c *Client) HighTTSGeneration(ctx context.Context, req HighTTSModelAndParams) (*GabsContainer, error) {
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}

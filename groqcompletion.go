@@ -75,7 +75,7 @@ type GroqChatCompletionParams struct {
 	User             string         `json:"user,omitempty"`
 }
 
-func (c *Client) GroqChatCompletion(ctx context.Context, req *GroqChatCompletionParams) (*ResponseMsg, error) {
+func (c *Client) GroqChatCompletion(ctx context.Context, req *GroqChatCompletionParams) (*GabsContainer, error) {
 	if len(req.Messages) == 0 {
 		return nil, ErrGroqChatCompletionNoMessage
 	}

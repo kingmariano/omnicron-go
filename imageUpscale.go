@@ -61,7 +61,7 @@ type HighImageUpscaleGenerationModelAndParams struct {
 	Parameters HighImageUpscaleGenerationParams
 }
 
-func (c *Client) LowImageUpscaling(ctx context.Context, req LowImageUpscaleGenerationModelAndParams) (*ResponseMsg, error) {
+func (c *Client) LowImageUpscaling(ctx context.Context, req LowImageUpscaleGenerationModelAndParams) (*GabsContainer, error) {
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}
@@ -76,7 +76,7 @@ func (c *Client) LowImageUpscaling(ctx context.Context, req LowImageUpscaleGener
 	return lowImageUpscaleResponse, nil
 }
 
-func (c *Client) HighImageUpscaling(ctx context.Context, req HighImageUpscaleGenerationModelAndParams) (*ResponseMsg, error) {
+func (c *Client) HighImageUpscaling(ctx context.Context, req HighImageUpscaleGenerationModelAndParams) (*GabsContainer, error) {
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}

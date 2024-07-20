@@ -72,7 +72,7 @@ type HighImageGenerationModelAndParams struct {
 }
 
 // LowImageGeneration handles the low image generation request for models that do not support image-to-image processing.
-func (c *Client) LowImageGeneration(ctx context.Context, req LowImageGenerationModelAndParams) (*ResponseMsg, error) {
+func (c *Client) LowImageGeneration(ctx context.Context, req LowImageGenerationModelAndParams) (*GabsContainer, error) {
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}
@@ -88,7 +88,7 @@ func (c *Client) LowImageGeneration(ctx context.Context, req LowImageGenerationM
 }
 
 // HighImageGeneration handles the high image generation request for models that support image-to-image processing.
-func (c *Client) HighImageGeneration(ctx context.Context, req HighImageGenerationModelAndParams) (*ResponseMsg, error) {
+func (c *Client) HighImageGeneration(ctx context.Context, req HighImageGenerationModelAndParams) (*GabsContainer, error) {
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}

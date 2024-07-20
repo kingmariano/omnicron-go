@@ -37,7 +37,7 @@ type HighVideoGenerationModelAndParams struct {
 	Parameters HighVideoGenerationParams
 }
 
-func (c *Client) VideoGeneration(ctx context.Context, req HighVideoGenerationModelAndParams) (*ResponseMsg, error) {
+func (c *Client) VideoGeneration(ctx context.Context, req HighVideoGenerationModelAndParams) (*GabsContainer, error) {
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}

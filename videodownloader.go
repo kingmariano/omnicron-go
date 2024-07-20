@@ -12,7 +12,7 @@ type VideoDownloadParams struct {
 }
 
 // this download video function downloads the video url from any of the supported sites uploads to cloudinary and returns the direct download url
-func (c *Client) DownloadVideo(ctx context.Context, req *VideoDownloadParams) (*ResponseMsg, error) {
+func (c *Client) DownloadVideo(ctx context.Context, req *VideoDownloadParams) (*GabsContainer, error) {
 	if req.URL == "" {
 		return nil, ErrVideoDownloadNoURLProvided
 	}
