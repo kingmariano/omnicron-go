@@ -17,13 +17,13 @@ func main() {
 		Messages: []omnicron.Message{
 			{
 				Content: "What is the weather like in New York City?",
-                Role:     "user",
+				Role:    "user",
 			},
 		},
 	})
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
-        return     
+		return
 	}
 	jsonData, err := json.MarshalIndent(g4fResponse, "", "  ")
 	if err != nil {

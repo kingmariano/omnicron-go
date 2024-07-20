@@ -13,7 +13,7 @@ type G4FRequest struct {
 }
 
 // this uses the g4f library by xtekky: https://github.com/xtekky/gpt4free
-func (c *Client) GPT4Free(ctx context.Context, req *G4FRequest) (*GabsContainer, error){
+func (c *Client) GPT4Free(ctx context.Context, req *G4FRequest) (*GabsContainer, error) {
 	if len(req.Messages) == 0 {
 		return nil, ErrGroqChatCompletionNoMessage
 	}

@@ -57,7 +57,7 @@ func main() {
 		return
 	}
 
-	fmt.Println("JSON data written to file.json successfully"
+	fmt.Println("JSON data written to file.json successfully")
 	// dynamically handle the response with the Gabs library: https://github.com/Jeffail/gabs/
 	outputText := res.Path("response.output").Data().(map[string]interface{})
 	fmt.Println(outputText)
