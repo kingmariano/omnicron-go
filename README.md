@@ -83,7 +83,7 @@ func main() {
 
 }
 ```
-> This is an example code for using the image generation endpoint. Take note that the response object is an instance representing  of the **gabs container for dynamic JSON handling**. Check out the [gabs](https://github.com/Jeffail/gabs) for more details on how to get your desired response.
+> This is an example code for using the image generation endpoint. Take note that the response object is an instance representation  of the **gabs container for dynamic JSON handling**. Check out the [gabs library](https://github.com/Jeffail/gabs) for more details on how to get your desired response.
 
 For more examples, see [_examples](./_examples)
 
