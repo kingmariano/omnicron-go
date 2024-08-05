@@ -41,13 +41,7 @@ func main() {
 			Prompt:            "Astronaut in a jungle, cold color palette, muted colors, detailed, 8k",
 			NegativePrompt:    omnicron.Ptr("ugly, deformed, noisy, blurry, distorted"),
 			ImageFile:         imageFile,
-			Width:             omnicron.Ptr(1024),
-			Height:            omnicron.Ptr(1024),
-			NumOutputs:        omnicron.Ptr(1),
-			Scheduler:         omnicron.Ptr("DPMSolver++"),
-			NumInferenceSteps: omnicron.Ptr(30),
-			GuidanceScale:     omnicron.Ptr(3.1),
-			PromptStrength:    omnicron.Ptr(0.7),
+		
 		},
 	})
 	if err != nil {

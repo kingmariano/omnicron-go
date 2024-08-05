@@ -21,8 +21,7 @@ func main() {
 		Model: omnicron.MetaMusicGenModel,
 		Parameters: omnicron.HighMusicGenerationParams{
 			Prompt:         "Create a vibrant Afrobeat track inspired by Nigerian music culture ",
-			TopK:           omnicron.Ptr(255),
-			ModelVersion:   omnicron.Ptr("melody-large"),
+	
 			InputAudioFile: musicFile,
 		},
 	})
