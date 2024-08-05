@@ -82,7 +82,7 @@ func (c *Client) GroqChatCompletion(ctx context.Context, req *GroqChatCompletion
 	if req.Model == "" {
 		return nil, ErrModelNotFound
 	}
-	body, err := c.newJSONPostRequest(ctx, "/grok/chatcompletion", "", req)
+	body, err := c.newJSONPostRequest(ctx, "/groq/chatcompletion", "", req)
 	if err != nil {
 		return nil, err
 	}
